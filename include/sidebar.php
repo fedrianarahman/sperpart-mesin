@@ -25,6 +25,7 @@
                         <ul aria-expanded="false">
                             <li><a href="dataBarang.php">Data Barang</a></li>
                             <li><a href="dataRak.php">Data Rak</a></li>
+                            <li><a href="dataPermintaan.php">Permintaan</a></li>
                         </ul>
                     </li>
 					
