@@ -1,10 +1,11 @@
 <?php
 session_start();
+include './controller/conn.php';
 if (!isset($_SESSION['nama'])) {
     header("Location: ./auth/login.php");
     exit();
 }
-include './controller/conn.php';
+$kode_barang = $_GET['kode_barang'];
 ?>
 
 <!DOCTYPE html>
@@ -89,7 +90,7 @@ include './controller/conn.php';
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index.php">Home</a></li>
                             <li class="breadcrumb-item active"><a href="javascript:void(0);">User</a></li>
-                            <li class="breadcrumb-item active"><a href="javascript:void(0);">All Role</a></li>
+                            <li class="breadcrumb-item active"><a href="javascript:void(0);">All Barang</a></li>
                         </ol>
                     </div>
                 </div>
@@ -118,8 +119,7 @@ include './controller/conn.php';
                         ?>
                         <div class="card">
 							<div class="card-header">
-                                <h4 class="card-title">Data Role</h4>
-                                <a href="./addUser.php" class="btn btn-primary">+ Add new</a>
+                                <a href="./dataBarang.php" class="btn btn-warning text-white">Kembali</a>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -127,38 +127,41 @@ include './controller/conn.php';
 												<thead>
 													<tr>
 														<th>#</th>
-														<th>Name</th>
-														<th>No Hp</th>
-														<th>Email</th>
-														<th>status</th>
-														<th>Posisi</th>
-														<th>Aksi</th>
+														<th>Kode Barang</th>
+														<th>Nama Barang</th>
+														<th>Merk</th>
+														<th>Rak</th>
+														<th>Sat</th>
+														<th>Awal</th>
+                                                        <th>Masuk</th>
+                                                        <th>Keluar</th>
+                                                        <th>Akhir</th>
+                                                        <th>Tanggal Dibuat</th>
+                                                        <th>Tgl Diupdate</th>
 													</tr>
 												</thead>
 												<tbody>
-                                                  <?php
-                                                  $ambilDataUser = mysqli_query($conn,"SELECT user.id AS user_id, user.nama, user.email, user.no_telpon, role.nama_role FROM user INNER JOIN role ON role.id = user.role");
-                                                  $i = 1;
-
-                                                  while ($data = mysqli_fetch_array($ambilDataUser)) {
-                                                    
-                                                  ?>
+                                                    <?php
+                                                    $ambilDataBarang = mysqli_query($conn, "SELECT * FROM tb_barang INNER JOIN rak_barang ON rak_barang.id = tb_barang.rak WHERE tb_barang.kode_barang = '$kode_barang'");
+                                                    $i=1;
+                                                    while ($data = mysqli_fetch_array($ambilDataBarang)) {
+                                                    ?>
                                                     <tr>
                                                         <td><?php echo $i?></td>
-														<td><img class="rounded-circle" width="35" src="images/profile/small/pic1.jpg" alt=""><span class="ml-2"><?php echo ucwords($data['nama'])?></span></td>
-														<td><?php echo $data['email']?></td>
-														<td><?php echo $data['no_telpon']?></td>
-														<td><?php echo $data['nama_role']?></td>
-														
-														<td><?php echo $data['nama_role']?></td>
-														<td>
-															<a href="./editUser.php?id=<?php echo $data['user_id']?>" class="btn btn-sm btn-primary" ><i class="la la-pencil"></i></a>
-															<a href="detailUser.php?id=<?php echo $data['user_id']?>" class="btn btn-sm btn-warning"><i class="la la-eye text-white"></i></a>
-                                                            <a href="./controller/user/delete.php?id=<?php echo $data['user_id']?>" class="btn btn-sm btn-danger"><i class="la la-trash-o"></i></a>
-														</td>												
-													</tr>
-                                                  <?php $i++?>
-                                                  <?php }?>
+                                                        <td><?php echo $data['kode_barang']?></td>
+                                                        <td><?php echo $data['nama_barang']?></td>
+                                                        <td><?php echo $data['merek']?></td>
+                                                        <td><?php echo $data['nama_rak']?></td>
+                                                        <td><?php echo $data['satuan']?></td>
+                                                        <td><?php echo $data['awal']?></td>
+                                                        <td><?php echo $data['masuk']?></td>
+                                                        <td><?php echo $data['keluar']?></td>
+                                                        <td><?php echo $data['akhir']?></td>
+                                                        <td><?php echo $data['created_at']?></td>
+                                                        <td><?php echo $data['updated_at']?></td>
+                                                    </tr>
+                                                    <?php $i++?>
+                                                    <?php }?>
 												</tbody>
 											</table>
                                 </div>

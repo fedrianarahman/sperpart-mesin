@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['nama'])) {
+    header("Location: ./auth/login.php");
+    exit();
+}
 include './controller/conn.php';
 ?>
 
@@ -154,9 +158,13 @@ include './controller/conn.php';
                                                         <td><?php echo $data['keluar']?></td>
                                                         <td><?php echo $data['akhir']?></td>
                                                         <td>
-                                                        <a href="#" class="btn btn-sm btn-primary" ><i class="la la-pencil"></i></a>
-															<a href="#" class="btn btn-sm btn-warning"><i class="la la-eye text-white"></i></a>
-                                                            <a href="#" class="btn btn-sm btn-danger"><i class="la la-trash-o"></i></a>
+                                                            <a href="./detailBarang.php?kode_barang=<?php echo $data['kode_barang']?>" class="btn btn-sm btn-warning"><i class="la la-eye text-white"></i></a>
+                                                            <?php if ($_SESSION['role']=='manager' || $_SESSION['role'] =='admin') {
+                                                            
+                                                            ?>
+                                                            <a href="./editBarang.php?kode_brg=<?php echo $data['kode_barang']?>" class="btn btn-sm btn-primary" ><i class="la la-pencil"></i></a>
+                                                            <a href="./controller/barang/delete.php?kode_barang=<?php echo $data['kode_barang']?>" class="btn btn-sm btn-danger"><i class="la la-trash-o"></i></a>
+                                                            <?php }?>
                                                         </td>
                                                     </tr>
                                                     <?php $i++?>

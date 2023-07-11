@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['nama'])) {
+    header("Location: ./auth/login.php");
+    exit();
+}
 include './controller/conn.php';
 $id = $_GET['id'];
 ?>
