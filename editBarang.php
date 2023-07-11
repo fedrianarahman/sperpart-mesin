@@ -1,10 +1,11 @@
 <?php
 session_start();
-include './controller/conn.php';
 if (!isset($_SESSION['nama'])) {
     header("Location: ./auth/login.php");
     exit();
 }
+include './controller/conn.php';
+$kode = $_GET['kode_brg'];
 ?>
 
 <!DOCTYPE html>
@@ -96,7 +97,7 @@ if (!isset($_SESSION['nama'])) {
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index.php">Home</a></li>
                             <li class="breadcrumb-item active"><a href="javascript:void(0);">Barang</a></li>
-                            <li class="breadcrumb-item active"><a href="javascript:void(0);">Barang</a></li>
+                            <li class="breadcrumb-item active"><a href="javascript:void(0);">Update Barang</a></li>
                         </ol>
                     </div>
                 </div>
@@ -104,22 +105,35 @@ if (!isset($_SESSION['nama'])) {
                 <div class="col-lg-12">
                     <div class="card">
                     <div class="card-header">
-                                <h4 class="card-title">Add Barang</h4>
+                                <h4 class="card-title">Update Barang</h4>
                             </div>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form method="POST" action="./controller/barang/add.php">
+                                    <?php
+                                    $ambilDataBarang = mysqli_query($conn, "SELECT * FROM tb_barang WHERE kode_barang = '$kode'");
+                                    
+                                    $data = mysqli_fetch_array($ambilDataBarang);
+                                    
+                                    ?>
+                                    <form method="POST" action="./controller/barang/update.php">
                                        <div class="row">
                                        <div class="col-md-6">
                                        <div class="form-group">
+                                            <label for="">Kode Barang</label>
+                                            <input type="text" class="form-control input-default " placeholder="" name="kd_brg" value="<?php echo $data['kode_barang']?>" readonly>
+                                            
+                                        </div>
+                                       </div>
+                                       <div class="col-md-6">
+                                       <div class="form-group">
                                             <label for="">Nama Barang</label>
-                                            <input type="text" class="form-control input-default " placeholder="" name="nama_barang" value="">
+                                            <input type="text" class="form-control input-default " placeholder="" name="nama_barang" value="<?php echo $data['nama_barang']?>">
                                         </div>
                                        </div>
                                        <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="">Merk Barang</label>
-                                            <input type="text" class="form-control input-default " placeholder="" name="merk_barang" value="">
+                                            <input type="text" class="form-control input-default " placeholder="" name="merk_barang" value="<?php echo $data['merek']?>">
                                         </div>
                                        </div>
                                        <div class="col-md-6">
@@ -129,9 +143,11 @@ if (!isset($_SESSION['nama'])) {
                                                 <option>Plih</option>
                                                 <?php
                                                 $ambilDataRole = mysqli_query($conn, "SELECT * FROM rak_barang");
-                                                while ($data = mysqli_fetch_array($ambilDataRole)) {
+                                                while ($dataRak = mysqli_fetch_array($ambilDataRole)) {
                                                 ?>
-                                                <option value="<?php echo $data['id']?>"><?php echo $data['nama_rak']?></option>
+                                                <option value="<?php echo $dataRak['id']?>" <?php if ($data['rak']==$dataRak['id']) {
+                                                    echo 'selected';
+                                                }?>><?php echo $dataRak['nama_rak']?></option>
                                                 <?php }?>
                                             </select>
                                         </div>
@@ -139,36 +155,36 @@ if (!isset($_SESSION['nama'])) {
                                        <div class="col-md-6">
                                        <div class="form-group"> 
                                             <label for="">Satuan Barang</label>
-                                            <input type="text" class="form-control input-default " placeholder="" name="satuan_barang" value="">
+                                            <input type="text" class="form-control input-default " placeholder="" name="satuan_barang" value="<?php echo $data['satuan']?>">
                                         </div>
                                        </div>
                                        <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="">awal</label>
-                                            <input type="number" class="form-control input-default " placeholder="" name="awal" value="">
+                                            <input type="number" class="form-control input-default " placeholder="" name="awal" value="<?php echo $data['awal']?>">
                                         </div>
                                        </div>
                                        <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="">masuk</label>
-                                            <input type="number" class="form-control input-default " placeholder="" name="masuk" value="">
+                                            <input type="number" class="form-control input-default " placeholder="" name="masuk" value="<?php echo $data['masuk']?>">
                                         </div>
                                        </div>
                                        <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="">keluar</label>
-                                            <input type="number" class="form-control input-default " placeholder="" name="keluar" value="">
+                                            <input type="number" class="form-control input-default " placeholder="" name="keluar" value="<?php echo $data['keluar']?>">
                                         </div>
                                        </div>
                                        <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="">akhir</label>
-                                            <input type="number" class="form-control input-default " placeholder="" name="akhir" value="">
+                                            <input type="number" class="form-control input-default " placeholder="" name="akhir" value="<?php echo $data['akhir']?>">
                                         </div>
                                        </div>
                                        </div>
                                         <a href="./dataBarang.php" class="btn btn-warning text-white">Kembali</a>
-                                      <button class="btn float-right btn-primary" type="submit">Tambah</button>
+                                      <button class="btn float-right btn-primary" type="submit">Update</button>
                                     </form>
                                 </div>
                             </div>

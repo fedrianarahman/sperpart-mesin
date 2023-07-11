@@ -1,6 +1,10 @@
 <?php
 session_start();
 include './controller/conn.php';
+if (!isset($_SESSION['nama'])) {
+    header("Location: ./auth/login.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>

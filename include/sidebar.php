@@ -7,8 +7,9 @@
 							<span class="nav-text">Dashboard</span>
 						</a>
                     </li>
-					
-					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                    <?php if ($_SESSION['role'] == 'manager' || $_SESSION['role'] == 'admin') {   
+                    ?>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
 							<i class="la la-users"></i>
 							<span class="nav-text">Users</span>
 						</a>
@@ -18,6 +19,7 @@
                            
                         </ul>
                     </li>
+					<?php }?>
                     <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
 							<i class="la la-building"></i>
 							<span class="nav-text">Departments</span>

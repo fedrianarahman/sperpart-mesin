@@ -1,3 +1,13 @@
+<?php
+session_start();
+// Cek apakah sesi login telah diatur
+if (!isset($_SESSION['nama'])) {
+    header("Location: ./auth/login.php");
+    exit();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -70,8 +80,7 @@
         ***********************************-->
         <div class="content-body">
             <!-- row -->
-            
-        
+           <!-- <?php echo $_SESSION['role']?> -->
         </div>
         <!--**********************************
             Content body end
