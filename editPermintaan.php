@@ -1,6 +1,18 @@
 <?php
 session_start();
 include './controller/conn.php';
+$id = $_GET['id'];
+if($id) {
+    $getData = mysqli_query($conn, "SELECT * FROM `tb_permintaan` WHERE `id`='$id'");
+    $data = mysqli_fetch_array($getData);
+    if($getData) {
+        echo "berhasil";
+} else {
+        echo "error";
+    }
+} else {
+    header("Location:../../dataPermintaan.php");    
+}
 ?>
 
 <!DOCTYPE html>
@@ -83,50 +95,47 @@ include './controller/conn.php';
             <!-- row -->
             <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h6>Surat Permintaan (Klik gambar)</h6>
+                            <a href="./images/surat_permintaan/<?= $data['surat_request'] ?>" target="_blank">
+                                <img src="./images/surat_permintaan/<?= $data['surat_request'] ?>" class="img-fluid" alt="">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
                     <div class="card">
                     <div class="card-header">
-                                <h4 class="card-title">Tambah Permintaan</h4>
+                                <h4 class="card-title">Edit Permintaan</h4>
                             </div>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form method="POST" action="./controller/permintaan/add.php" enctype="multipart/form-data"> 
+                                    <form method="POST" action="./controller/permintaan/update.php?id=<?= $data['id'] ?>" enctype="multipart/form-data"> 
                                        <div class="row">
                                        <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="">Nama Teknisi</label>
-                                            <input type="text" class="form-control input-default " placeholder="" name="nama_teknisi" value="" required>
+                                            <input type="text" class="form-control input-default " placeholder="" name="nama_teknisi" value="<?= $data['nama_teknisi'] ?>" required>
                                         </div>
-                                       </div>
-                                       <div class="col-md-6">
-                                        <div class="form-group">
-                                                <label for="nama_barang">Barang</label>
-                                                <select name="nama_barang" class="form-control input-default " id="nama_barang" required>
-                                                <?php 
-                                                        $getBarang = mysqli_query($conn, "SELECT * FROM `tb_barang`");
-                                                        while ($barang = mysqli_fetch_array($getBarang)) {
-                                                ?>
-                                                    <option value="<?= $barang['nama_barang']; ?>"><?= $barang['nama_barang'] ?></option>
-                                                <?php } ?>
-                                                </select>
-                                            </div>
                                        </div>
                                        <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="jumlah_barang">Jumlah</label>
-                                            <input type="number" class="form-control input-default " placeholder="" name="jumlah_barang" value="" required>
+                                            <input type="number" class="form-control input-default " placeholder="" name="jumlah_barang" value="<?= $data['jumlah_barang'] ?>" required>
                                         </div>
                                        </div>
-                                       <div class="col-md-6">
+                                       <div class="col-md-12">
                                         <div class="form-group">
-                                                <label for="surat_request">Surat Permintaan</label>
-                                                <input type="file" class="mb-1 form-control input-default" placeholder="" name="surat_request" value="" required>
+                                                <label for="surat_request">Surat Permintaan</label> 
+                                                <input type="file" class="mb-1 form-control input-default" placeholder="" name="surat_request" value="">
                                                 <p class="text-small text-danger">surat permintaan betuk harus bentuk foto/gambar</p>
                                             </div>
                                             </div>
                                        </div>
-                                        <a href="./dataPermintaanr.php" class="btn btn-warning text-white">Kembali</a>
-                                      <button class="btn float-right btn-primary" type="submit">Tambah</button>
+                                        <a href="./dataPermintaan.php" class="btn btn-warning text-white">Kembali</a>
+                                        <button class="btn float-right btn-primary" type="submit">Tambah</button>
                                     </form>
                                 </div>
                             </div>

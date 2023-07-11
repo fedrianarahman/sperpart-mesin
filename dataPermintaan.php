@@ -112,15 +112,15 @@ include './controller/conn.php';
 														<th>#</th>
 														<th>Nama Teknisi</th>
 														<th>Nama Barang</th>
-														<th>Jumlah Barang</th>
-														<th>Surat Permintaan</th>
+														<th>Jumlah</th>
+														<th>Surat</th>
 														<th>status</th>
                                                         <th class="text-center">Aksi</th>
 													</tr>
 												</thead>
 												<tbody>
                                                     <?php
-                                                    $ambilDataBarang = mysqli_query($conn, "SELECT * FROM `tb_permintaan` INNER JOIN `user` ON tb_permintaan.id_user=user.id INNER JOIN `tb_barang` ON tb_permintaan.nama_barang=tb_barang.nama_barang");
+                                                    $ambilDataBarang = mysqli_query($conn, "SELECT * FROM `tb_permintaan` INNER JOIN `tb_barang` ON tb_permintaan.nama_barang=tb_barang.nama_barang");
                                                     $i=1;
                                                     while ($data = mysqli_fetch_array($ambilDataBarang)) {
                                                     ?>
@@ -128,7 +128,7 @@ include './controller/conn.php';
                                                         <td><?php echo $i?></td>
                                                         <td><?php echo $data['nama_teknisi']?></td>
                                                         <td><?php echo $data['nama_barang']?></td>
-                                                        <td><?php echo $data['jumlah_barang']?></td>
+                                                        <td><?php echo $data['jumlah_barang']?> <?= $data['satuan'] ?></td>
                                                         <td><?php echo $data['surat_request']?></td>
                                                         <td>
                                                             <?php if($data['status'] == "menunggu") { ?>
@@ -152,7 +152,7 @@ include './controller/conn.php';
                                                         <td>
                                                             <div class="d-flex">
                                                                 <a href="editPermintaan.php?id=<?php echo $data['id'] ?>" class="m-1 btn btn-sm btn-primary" ><i class="la la-pencil"></i></a>
-                                                                <a href="#" class="m-1 btn btn-sm btn-danger"><i class="la la-trash-o"></i></a>
+                                                                <a href="./controller/permintaan/delete.php?id=<?php echo $data['id'] ?>" class="m-1 btn btn-sm btn-danger"><i class="la la-trash-o"></i></a>
                                                             </div>
                                                         </td>
                                                     </tr>

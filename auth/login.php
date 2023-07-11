@@ -3,26 +3,22 @@ session_start();
 include '../controller/conn.php';
 
 if (isset($_POST['submit'])) {
-
     $username = $_POST['username'];
     $password = $_POST['password'];
-
-    $cekDataUser = mysqli_query($conn, "SELECT * FROM user INNER JOIN role ON role.id = user.role");
-
+    $cekDataUser = mysqli_query($conn, "SELECT * FROM `user` INNER JOIN role ON role.id = user.role");
+    $getUser = mysqli_query($conn, "SELECT * FROM `user` WHERE `username`='$username'");
+    $user = mysqli_fetch_array($getUser);
+    $_SESSION['id_user'] = $user['id'];
     $loggedIn = false; // Flag untuk menandakan status login
-
     while ($result = mysqli_fetch_array($cekDataUser)) {
         if ($username == $result['username'] && $password == $result['password']) {
-
             $loggedIn = true;
-
             $_SESSION['nama'] = $result['nama'];
             $_SESSION['email'] = $result['email'];
             $_SESSION['role'] = $result['nama_role'];
             break; // Keluar dari loop jika data ditemukan
         }
     }
-
     if ($loggedIn) {
         header("Location: ../index.php");
         exit();
@@ -41,7 +37,7 @@ if (isset($_POST['submit'])) {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Edumin - Bootstrap Admin Dashboard </title>
+    <title>Login - Dashboard</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon.png">
     <link href="../css/style.css" rel="stylesheet">
