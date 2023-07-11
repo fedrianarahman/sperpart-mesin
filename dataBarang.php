@@ -120,7 +120,11 @@ include './controller/conn.php';
 							<div class="card-header">
                                 <h4 class="card-title">Data Barang</h4>
                                 <!-- <a href="#" class="btn btn-success text-white">Import Excell</a> -->
-                                <a href="./addBarang.php" class="btn btn-primary">+ Add new</a>
+                                <?php if ($_SESSION['role']=='manager' || $_SESSION['role'] =='admin') {
+                                    echo '<a href="./addBarang.php" class="btn btn-primary">+ Add new</a>';
+                                }?>
+
+                                <!-- <a href="./addBarang.php" class="btn btn-primary">+ Add new</a> -->
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
