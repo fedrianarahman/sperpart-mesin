@@ -33,7 +33,8 @@ $akhir = !empty($_POST['akhir']) ? $_POST['akhir'] : 0;
 $tgl_input = date('Y-m-d H:i:s');
 // memasukan data ke database
 
-$query = mysqli_query($conn, "INSERT INTO `tb_barang`(`kode_barang`, `nama_barang`, `merek`, `rak`, `satuan`, `awal`, `masuk`, `keluar`, `akhir`, `created_at`, `updated_at`) VALUES ('$kode_barang','$nama_barang','$merk_barang','$nama_rak','$satuan_barang','$awal','$masuk','$keluar','$akhir','$tgl_input','')");
+// $query = mysqli_query($conn, "INSERT INTO `tb_barang`(`kode_barang`, `nama_barang`, `merek`, `rak`, `satuan`, `awal`, `masuk`, `keluar`, `akhir`, `created_at`, `updated_at`) VALUES ('$kode_barang','$nama_barang','$merk_barang','$nama_rak','$satuan_barang','$awal','$masuk','$keluar','$akhir','$tgl_input','')");
+$query = mysqli_query($conn, "INSERT INTO `tb_barang`(`kode_barang`, `nama_barang`, `merek`, `rak`, `satuan`, `jumlah_awal`, `jumlah_masuk`, `jumlah_keluar`, `jumlah_total`, `jumlah_akhir`, `created_at`, `updated_at`) VALUES ('$kode_barang','$nama_barang','$merk_barang','$nama_rak','$satuan_barang','$awal','$masuk','$keluar','$akhir','','$tgl_input','')");
 
 if ($query) {
     $_SESSION['status-info'] = "Data Berhasil Ditambahkan";
