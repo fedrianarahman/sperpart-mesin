@@ -154,22 +154,38 @@ include './controller/conn.php';
                                                         </td>
                                                         <td>
                                                             <div class="d-flex">
+                                                                <?php if($data['status'] == 'Ditolak') { ?>
                                                                 <a href="./controller/permintaan/delete.php?id=<?php echo $data['id'] ?>" class="m-1 btn btn-sm btn-danger"><i class="la la-trash-o"></i></a>
+                                                                <?php } ?>
                                                                 <?php if($_SESSION['role'] == 'teknisi') { ?>
                                                                     <a href="editPermintaan.php?id=<?php echo $data['id'] ?>" class="m-1 btn btn-sm btn-primary" ><i class="la la-times"></i></a>
                                                                 <?php } ?>
                                                                 <?php if($_SESSION['role'] == 'operator gudang') { ?>
-                                                                    <a href="./controller/permintaan/Tolak.php?=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-danger text-white"><i class="la la-times"></a>
-                                                                    <a href="./controller/permintaan/AccOperator.php?=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-success text-white"><i class="la la-check"></i></a>
+                                                                    <a href="./controller/permintaan/Tolak.php?id=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-danger text-white"><i class="la la-times"></i></a>
+                                                                    <a href="./controller/permintaan/AccOperator.php?id=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-success text-white"><i class="la la-check"></i></a>
                                                                 <?php } ?>
                                                                 <?php if($_SESSION['role'] == 'staff gudang' || $_SESSION['role'] == 'manager') { ?>
-                                                                    <a href="./controller/permintaan/AccAkhir.php?=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-primary text-white"><i class="la la-check"></i></a>
+                                                                <?php if($data['status'] == 'Ditolak') { ?>
+                                                                <?php } else if($data['status'] == 'Acc Akhir') { ?>
+                                                                <a href="./detailPermintaan.php?id=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-warning text-white"><i class="la la-eye"></i></a>
+                                                                <?php } else { ?>
+                                                                <a href="./controller/permintaan/AccAkhir.php?id=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-primary text-white"><i class="la la-check"></i></a>
+                                                                <?php } ?>
                                                                 <?php } ?>
                                                                 <?php if($_SESSION['role'] == 'admin') { ?>
-                                                                    <a href="editPermintaan.php?id=<?php echo $data['id'] ?>" class="m-1 btn btn-sm btn-primary" ><i class="la la-pencil"></i></a>
-                                                                    <a href="./controller/permintaan/Tolak.php?=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-danger text-white"><i class="la la-times"></i></a>
-                                                                    <a href="./controller/permintaan/AccOperator.php?=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-primary text-white"><i class="la la-check"></i></a>
-                                                                    <a href="./controller/permintaan/AccAkhir.php?=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-success text-white"><i class="la la-check"></i></a>
+                                                                        <a href="editPermintaan.php?id=<?php echo $data['id'] ?>" class="m-1 btn btn-sm btn-primary" ><i class="la la-pencil"></i></a>
+                                                                        <?php if($data['status'] == 'Acc Operator' || $data['status'] == 'Acc Akhir' || $data['status'] == 'Ditolak') {  ?>
+                                                                        <?php } else { ?>
+                                                                        <a href="./controller/permintaan/Tolak.php?id=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-danger text-white"><i class="la la-times"></i></a>
+                                                                        <?php } ?>
+                                                                        <?php if($data['status'] == 'menunggu') {  ?>
+                                                                        <a href="./controller/permintaan/AccOperator.php?id=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-primary text-white"><i class="la la-check"></i></a>
+                                                                        <?php } else if ($data['status'] == 'Acc Operator') {  ?>
+                                                                            <a href="./controller/permintaan/AccAkhir.php?id=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-success text-white"><i class="la la-check"></i></a>
+                                                                        <?php } else if ($data['status'] == 'Acc Akhir') {  ?>
+                                                                            <a href="./detailPermintaan.php?id=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-warning text-white"><i class="la la-eye"></i></a>
+                                                                        <?php } else { ?>
+                                                                    <?php } ?>
                                                                 <?php } ?>
                                                             </div>
                                                         </td>
