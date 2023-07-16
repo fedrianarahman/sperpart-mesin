@@ -26,6 +26,9 @@
 						</a>
                         <ul aria-expanded="false">
                             <li><a href="dataBarang.php">Data Barang</a></li>
+                            <?php if ($_SESSION['role'] == 'manager' || $_SESSION['role'] == 'admin') {   
+                            }
+                    ?>
                             <li><a href="dataRak.php">Data Rak</a></li>
                             <li><a href="dataPermintaan.php">Permintaan</a></li>
                         </ul>

@@ -13,7 +13,7 @@ $keluar = $_POST['keluar'];
 $akhir = $_POST['akhir'];
 $tgl_dirubah = date('Y-m-d H:i:s');
 
-$updateBarang = mysqli_query($conn, "UPDATE `tb_barang` SET `nama_barang`='$nama_barang',`merek`='$merek_barang',`rak`='$rak_barang',`satuan`='$satuan_barang',`awal`='$awal',`masuk`='$masuk',`keluar`='$keluar',`akhir`='$akhir',`updated_at`='$tgl_dirubah' WHERE `kode_barang`='$kode_brg'");
+$updateBarang = mysqli_query($conn, "UPDATE `tb_barang` SET `nama_barang`='$nama_barang',`merek`='$merek_barang',`rak`='$rak_barang',`satuan`='$satuan_barang',`jumlah_awal`='$awal',`jumlah_masuk`='$masuk',`jumlah_keluar`='$keluar',`jumlah_total`='',`jumlah_akhir`='$akhir',`updated_at`='' WHERE `kode_barang`='$kode_brg'");
 
 if ($updateBarang) {
     $_SESSION['status-info'] = "Data Berhasil Dipudate";
