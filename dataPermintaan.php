@@ -1,6 +1,8 @@
 <?php
 session_start();
 include './controller/conn.php';
+// echo $_SESSION['role'];
+
 ?>
 
 <!DOCTYPE html>
@@ -124,10 +126,11 @@ include './controller/conn.php';
                                                     <?php
                                                     if($_SESSION['role'] == 'operator gudang' || $_SESSION['role'] == 'teknisi') {
                                                         $ambilDataBarang = mysqli_query($conn, "SELECT * FROM `tb_permintaan` INNER JOIN `tb_barang` ON tb_permintaan.nama_barang=tb_barang.nama_barang WHERE `status`='menunggu'");
-                                                    } else if($_SESSION['role'] != 'operator gudang' || $_SESSION['role'] != 'teknisi') {
-                                                        $ambilDataBarang = mysqli_query($conn, "SELECT * FROM `tb_permintaan` INNER JOIN `tb_barang` ON tb_permintaan.nama_barang=tb_barang.nama_barang WHERE `status`='Acc Operator'");
-                                                    } else {
-                                                        $ambilDataBarang = mysqli_query($conn, "SELECT * FROM `tb_permintaan` INNER JOIN `tb_barang` ON tb_permintaan.nama_barang=tb_barang.nama_barang WHERE `status`='Acc Akhir'");
+                                                    } else if($_SESSION['role'] != 'operator gudang' || $_SESSION['role'] != 'teknisi' || $_SERVER['role'] != 'admin') {
+                                                        $ambilDataBarang = mysqli_query($conn, "SELECT * FROM `tb_permintaan` INNER JOIN `tb_barang` ON tb_permintaan.nama_barang=tb_barang.nama_barang WHERE `status`='Acc Akhir' OR `status`='Acc Operator' OR `status`='Ditolak'");
+                                                    }
+                                                    if($_SESSION['role'] == 'admin') {
+                                                        $ambilDataBarang = mysqli_query($conn, "SELECT * FROM `tb_permintaan` INNER JOIN `tb_barang` ON tb_permintaan.nama_barang=tb_barang.nama_barang");
                                                     }
                                                     $i=1;
                                                     while ($data = mysqli_fetch_array($ambilDataBarang)) {
@@ -144,33 +147,40 @@ include './controller/conn.php';
                                                         <td><a href="./images/surat_permintaan/<?= $data['surat_request'] ?>"><?php echo $data['surat_request']?></a></td>
                                                         <td>
                                                             <?php if($data['status'] == "menunggu") { ?>
-                                                                <div style="width: 100px; text-align: center; font-size: 14px;" class="bg-primary p-2 rounded text-white">
+                                                                <div style="width: 150px; font-weight: bold; text-align: center; font-size: 14px;" class="bg-primary p-2 rounded text-white">
                                                                     <?php echo $data['status']?>
                                                                 </div>
                                                             <?php } else if($data['status'] == "Acc Operator") { ?>
-                                                                <div style="width: 100px; text-align: center; font-size: 14px;" class="bg-info p-2 rounded text-white">
+                                                                <div style="width: 150px; font-weight: bold; text-align: center; font-size: 14px;" class="bg-info p-2 rounded text-white">
                                                                     <?php echo $data['status']?>
                                                                 </div>
                                                             <?php } else if($data['status'] == "Acc Akhir") { ?>
-                                                                <div style="width: 100px; text-align: center; font-size: 14px;" class="bg-success p-2 rounded text-white">
+                                                                <div style="width: 150px; font-weight: bold; text-align: center; font-size: 14px;" class="bg-success p-2 rounded text-white">
                                                                     <?php echo $data['status']?>
                                                                 </div>
                                                             <?php } else { ?>
-                                                                <div style="width: 100px; text-align: center; font-size: 14px;" class="bg-danger p-2 rounded text-white">
+                                                                <div style="width: 150px; font-weight: bold; text-align: center; font-size: 14px;" class="bg-danger p-2 rounded text-white">
                                                                     <?php echo $data['status']?>
                                                                 </div>
                                                             <?php } ?>
                                                         </td>
                                                         <td>
                                                             <div class="d-flex">
-                                                                <?php if($_SESSION['role'] == 'teknisi' || $_SESSION['role'] == 'admin') { ?>
-                                                                    <a href="editPermintaan.php?id=<?php echo $data['id'] ?>" class="m-1 btn btn-sm btn-primary" ><i class="la la-pencil"></i></a>
-                                                                <?php } ?>
                                                                 <a href="./controller/permintaan/delete.php?id=<?php echo $data['id'] ?>" class="m-1 btn btn-sm btn-danger"><i class="la la-trash-o"></i></a>
-                                                                <?php if($_SESSION['role'] == 'operator gudang' || $_SESSION['role'] == 'admin') { ?>
+                                                                <?php if($_SESSION['role'] == 'teknisi') { ?>
+                                                                    <a href="editPermintaan.php?id=<?php echo $data['id'] ?>" class="m-1 btn btn-sm btn-primary" ><i class="la la-times"></i></a>
+                                                                <?php } ?>
+                                                                <?php if($_SESSION['role'] == 'operator gudang') { ?>
+                                                                    <a href="./controller/permintaan/Tolak.php?=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-danger text-white"><i class="la la-times"></a>
                                                                     <a href="./controller/permintaan/AccOperator.php?=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-success text-white"><i class="la la-check"></i></a>
                                                                 <?php } ?>
-                                                                <?php if($_SESSION['role'] != 'teknisi' || $_SESSION['role'] == 'operator gudang') { ?>
+                                                                <?php if($_SESSION['role'] == 'staff gudang' || $_SESSION['role'] == 'manager') { ?>
+                                                                    <a href="./controller/permintaan/AccAkhir.php?=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-primary text-white"><i class="la la-check"></i></a>
+                                                                <?php } ?>
+                                                                <?php if($_SESSION['role'] == 'admin') { ?>
+                                                                    <a href="editPermintaan.php?id=<?php echo $data['id'] ?>" class="m-1 btn btn-sm btn-primary" ><i class="la la-pencil"></i></a>
+                                                                    <a href="./controller/permintaan/Tolak.php?=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-danger text-white"><i class="la la-times"></i></a>
+                                                                    <a href="./controller/permintaan/AccOperator.php?=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-primary text-white"><i class="la la-check"></i></a>
                                                                     <a href="./controller/permintaan/AccAkhir.php?=<?php echo $data['id'] ?>"  class="m-1 btn btn-sm btn-success text-white"><i class="la la-check"></i></a>
                                                                 <?php } ?>
                                                             </div>
