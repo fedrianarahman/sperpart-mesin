@@ -19984,6 +19984,8 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 .profile .profile-photo {
   max-width: 140px;
+  display:block;
+  margin: auto;
   position: absolute;
   top: -80px;
   left: 30px; }

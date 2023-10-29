@@ -117,6 +117,7 @@ $kode_barang = $_GET['kode_barang'];
 														<th>#</th>
 														<th>Kode Barang</th>
 														<th>Nama Barang</th>
+														<th>Photo</th>
 														<th>Merk</th>
 														<th>Rak</th>
 														<th>Sat</th>
@@ -138,13 +139,14 @@ $kode_barang = $_GET['kode_barang'];
                                                         <td><?php echo $i?></td>
                                                         <td><?php echo $data['kode_barang']?></td>
                                                         <td><?php echo $data['nama_barang']?></td>
+                                                        <td><a href=""><img width="70" src="./images/barang/<?php echo $data['photo'] ?>" alt=""></a></td>
                                                         <td><?php echo $data['merek']?></td>
                                                         <td><?php echo $data['nama_rak']?></td>
                                                         <td><?php echo $data['satuan']?></td>
-                                                        <td><?php echo $data['awal']?></td>
-                                                        <td><?php echo $data['masuk']?></td>
-                                                        <td><?php echo $data['keluar']?></td>
-                                                        <td><?php echo $data['akhir']?></td>
+                                                        <td><?php echo $data['jumlah_awal']?></td>
+                                                        <td><?php echo $data['jumlah_masuk']?></td>
+                                                        <td><?php echo $data['jumlah_keluar']?></td>
+                                                        <td><?php echo $data['jumlah_akhir']?></td>
                                                         <td><?php echo $data['created_at']?></td>
                                                         <td><?php echo $data['updated_at']?></td>
                                                     </tr>

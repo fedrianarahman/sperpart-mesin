@@ -68,7 +68,7 @@ if (!isset($_SESSION['nama'])) {
         ***********************************-->
         <div class="content-body">
             <!-- row -->
-           <!-- <?php echo $_SESSION['role']?> -->
+           <!-- <?php echo $_SESSION['id_user']?> -->
         </div>
         <!--**********************************
             Content body end

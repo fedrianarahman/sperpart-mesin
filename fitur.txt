@@ -4,3 +4,19 @@
 1. Login Multi User
 2. Mengirimkan username dan password Via email
 3. Import Data dari excell
+
+# di bagian teknisi, kolom rak dihapus
+#dibagian manager tambah barant, awal sama keluar di hilangkan
+
+
+
+
+TPS          :
+NIK           : 3201142102030005
+Nama       : Rahman Fedriana
+Alamat     : Kp. Mekarsari, Rt03/Rw07, Kel/Desa Leuwimekar, Kecamatan Leuwiliang
+No hp.      : 082258527102
+No rek.     : 
+
+
+

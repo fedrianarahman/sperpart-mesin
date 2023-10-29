@@ -7,7 +7,15 @@
 							<span class="nav-text">Dashboard</span>
 						</a>
                     </li>
-                    <?php if ($_SESSION['role'] == 'manager' || $_SESSION['role'] == 'admin') {   
+                    <?php
+                    if ($_SESSION['role'] =='manager') {?>
+					<li class=""><a class="ai-icon" href="dataUser.php" aria-expanded="false">
+							<i class="la la-users"></i>
+							<span class="nav-text">Data Users</span>
+						</a>
+                    </li>
+                    <?php }?>
+                    <?php if ($_SESSION['role'] == 'admin') {   
                     ?>
                     <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
 							<i class="la la-users"></i>
@@ -20,7 +28,20 @@
                         </ul>
                     </li>
 					<?php }?>
-                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                    <li class=""><a class="ai-icon" href="dataBarang.php" aria-expanded="false">
+							<i class="fa fa-bookmark"></i>
+							<span class="nav-text">Data Barang</span>
+						</a>
+                    </li>
+                   <?php if ($_SESSION['role'] !='teknisi') {
+                    # code...
+                   } ?>
+                    <li class=""><a class="ai-icon" href="dataPermintaan.php" aria-expanded="false">
+							<i class="fa fa-pencil-square-o"></i>
+							<span class="nav-text">Permintaan</span>
+						</a>
+                    </li>
+                    <!-- <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
 							<i class="la la-building"></i>
 							<span class="nav-text">Departments</span>
 						</a>
@@ -32,7 +53,7 @@
                             <li><a href="dataRak.php">Data Rak</a></li>
                             <li><a href="dataPermintaan.php">Permintaan</a></li>
                         </ul>
-                    </li>
+                    </li> -->
 					
 				</ul>
             </div>

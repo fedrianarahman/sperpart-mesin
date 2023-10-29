@@ -2,18 +2,11 @@
 session_start();
 include '../conn.php';
 
-$kode_brg = $_POST['kd_brg'];
-$nama_barang = trim(strtolower($_POST['nama_barang']));
-$merek_barang = trim(strtolower($_POST['merk_barang']));
-$rak_barang = $_POST['nama_rak'];
-$satuan_barang = trim(strtolower($_POST['satuan_barang']));
-$awal = $_POST['awal'];
-$masuk = $_POST['masuk'];
-$keluar = $_POST['keluar'];
-$akhir = $_POST['akhir'];
-$tgl_dirubah = date('Y-m-d H:i:s');
-
-// photo
+$idUser = $_SESSION['id_user'];
+$alamat = $_POST['alamat'];
+$noHP = $_POST['no_hp'];
+$email  = $_POST['email'];
+$password = $_POST['password'];
 if (!empty($_FILES['photo']['name'])) {
     $photo = upload();
     if (!$photo) {
@@ -23,13 +16,15 @@ if (!empty($_FILES['photo']['name'])) {
     $photo = $_POST['old_photo'];
 }
 
-$updateBarang = mysqli_query($conn, "UPDATE `tb_barang` SET `nama_barang`='$nama_barang',`photo`='$photo',`merek`='$merek_barang',`rak`='$rak_barang',`satuan`='$satuan_barang',`jumlah_awal`='$awal',`jumlah_masuk`='$masuk',`jumlah_keluar`='$keluar',`jumlah_total`='',`jumlah_akhir`='$akhir',`updated_at`='' WHERE `kode_barang`='$kode_brg'");
+$updateProfile = mysqli_query($conn, "UPDATE user SET alamat='$alamat', no_telpon = '$noHP', email = '$email', password = '$password', photo = '$photo' WHERE id = '$idUser'");
 
-if ($updateBarang) {
-    $_SESSION['status-info'] = "Data Berhasil Dipudate";
-}else{
-    $_SESSION['status-fail'] = "Data Tidak Berhasil Dirubah";
+if ($updateProfile) {
+    $_SESSION['status-info'] = "Data Berhasil Dirubah";
+} else {
+    $_SESSION['status-fail'] = "Data Gagal Dirubah!";
 }
+
+
 
 function upload() {
     $namaFile = $_FILES['photo']['name'];
@@ -62,7 +57,7 @@ function upload() {
     $namaFileBaru = time() . '_' . $namaFile;
 
     // Lokasi penyimpanan file
-    $lokasiSimpan = "../../images/barang/" . $namaFileBaru;
+    $lokasiSimpan = "../../images/profile/image-profile/" . $namaFileBaru;
 
     // Pindahkan file ke lokasi penyimpanan dengan nama baru
     if (move_uploaded_file($tmpName, $lokasiSimpan)) {
@@ -73,5 +68,5 @@ function upload() {
     }
 }
 
-header("Location:../../DataBarang.php");
+header("Location:../../profilePage.php");
 ?>

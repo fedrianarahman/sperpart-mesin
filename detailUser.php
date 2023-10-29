@@ -25,7 +25,76 @@ $id = $_GET['id'];
 	<link rel="stylesheet" href="vendor/bootstrap-select/dist/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/skin-2.css">
+    <style>
+        /* picture container */
+        .picture-container {
+            position: relative;
+            cursor: pointer;
+            text-align: center;
+        }
 
+        .picture {
+            width: 130px;
+            height: 130px;
+            background-color: #999999;
+            border: 4px solid #CCCCCC;
+            color: #FFFFFF;
+            border-radius: 50%;
+            margin: 0px auto;
+            overflow: hidden;
+            transition: all 0.2s;
+            -webkit-transition: all 0.2s;
+        }
+
+        .picture:hover {
+            border-color: #2ca8ff;
+        }
+
+        .content.ct-wizard-green .picture:hover {
+            border-color: #05ae0e;
+        }
+
+        .content.ct-wizard-blue .picture:hover {
+            border-color: #3472f7;
+        }
+
+        .content.ct-wizard-orange .picture:hover {
+            border-color: #ff9500;
+        }
+
+        .content.ct-wizard-red .picture:hover {
+            border-color: #ff3b30;
+        }
+
+        .picture input[type="file"] {
+            cursor: pointer;
+            display: block;
+            height: 100%;
+            left: 0;
+            opacity: 0 !important;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+
+        .pict-text {
+            font-size: small;
+            color: #999999;
+            /* background: red; */
+        }
+
+        .picture-src {
+            width: 100%;
+            object-fit: fill;
+
+        }
+
+        .jabatan {
+            font-weight: 600;
+            margin-top: -10px;
+            color: #999999;
+        }
+    </style>
 </head>
 
 <body>
@@ -79,56 +148,78 @@ $id = $_GET['id'];
             <div class="row page-titles mx-0">
                     <div class="col-sm-6 p-md-0">
                         <div class="welcome-text">
-                            <h4>Page</h4>
+                            <h4>Page Detail User</h4>
                         </div>
                     </div>
                     <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index.html">Home</a></li>
                             <li class="breadcrumb-item active"><a href="javascript:void(0);">User</a></li>
-                            <li class="breadcrumb-item active"><a href="javascript:void(0);">All User</a></li>
+                            <li class="breadcrumb-item active"><a href="javascript:void(0);">Detail User</a></li>
                         </ol>
                     </div>
                 </div>
                 <div class="row">
 					
 					<div class="col-lg-12">
-                    
                         <div class="card">
-							<div class="card-header">
-                                <a href="./dataUser.php" class="btn btn-warning text-white">Kembali</a>
-                            </div>
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-sm mb-0 table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th >Nama</th>
-                                                <th >Email</th>
-                                                <th>No Telpon</th>
-                                                <th>Alamat</th>
-                                                <th>Username</th>
-                                                <th>Posisi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="customers">
-                                           <?php
-                                           $ambilData = mysqli_query($conn, "SELECT * FROM user INNER JOIN role ON role.id = user.role");
-                                           while ($data= mysqli_fetch_array($ambilData)) {
-                                            
-                                           ?>
-                                            <tr>
-                                                <td><?php echo $data['nama']?></td>
-                                                <td><?php echo $data['email']?></td>
-                                                <td><?php echo $data['no_telpon']?></td>
-                                                <td><?php echo $data['alamat']?></td>
-                                                <td><?php echo $data['username']?></td>
-                                                <td><?php echo $data['nama_role']?></td>
-                                            </tr>
-                                           <?php } ?>
-                                        </tbody>
+                                <?php
+                                $id = $_GET['id'];
+                                $getData = mysqli_query($conn, "SELECT * FROM user INNER JOIN role ON role.id = user.role WHERE user.id ='$id'");
+                                while ($dataUser = mysqli_fetch_array($getData)) {?>
+                               <div class="row">
+                                <div class="col-md-6">
+                                    <div class="picture-container">
+                                        <div class="picture">
+                                            <?php
+                                            if ($dataUser['photo'] != null) {?>
+                                                <img src="./images/profile/image-profile/<?php echo $dataUser['photo'] ?>" class="picture-src mb-2" alt="">
+                                            <?php } else{?>
+                                                <img src="./images/profile/unit.png" class="picture-src mb-2" alt="">
+                                            <?php }?>
+                                        </div>
+                                        <h3 class="mt-2"><?php echo ucwords($dataUser['nama']) ?></h3>
+                                        <p class="jabatan"><?php echo ucwords($dataUser['nama_role']) ?></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <table class="table border-0">
+                                        <tr>
+                                            <td>username</td>
+                                            <td>:</td>
+                                            <td><?php echo $dataUser['username'] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Email</td>
+                                            <td>:</td>
+                                            <td><?php echo $dataUser['username'] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>NO HP</td>
+                                            <td>:</td>
+                                            <td><?php echo $dataUser['no_telpon'] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Alamat</td>
+                                            <td>:</td>
+                                            <td><?php echo $dataUser['alamat'] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Status</td>
+                                            <td>:</td>
+                                            <td><?php if ($dataUser['isActive']) {
+                                                echo '<span class="badge badge-xs light badge-success">Active</span>';
+                                            } else {
+                                                echo '<span class="badge badge-xs light badge-danger">NonActive</span>';
+                                            }
+                                             ?></td>
+                                        </tr>
                                     </table>
                                 </div>
+                               </div>
+                               <?php }?>
+                               <a href="./dataUser.php" class="btn btn-warning text-white">Kembali</a>
                             </div>
                         </div>
                     </div>

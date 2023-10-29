@@ -67,7 +67,7 @@ include './controller/conn.php';
         <div class="content-body">
             <!-- row -->
             <div class="container-fluid">
-            <div class="row page-titles mx-0">
+                <div class="row page-titles mx-0">
                     <div class="col-sm-6 p-md-0">
                         <div class="welcome-text">
                             <h4>Page</h4>
@@ -106,7 +106,7 @@ include './controller/conn.php';
                         ?>
                         <div class="card">
 							<div class="card-header">
-                                <h4 class="card-title">Data Role</h4>
+                                <h4 class="card-title">Data User</h4>
                                 <a href="./addUser.php" class="btn btn-primary">+ Add new</a>
                             </div>
                             <div class="card-body">
@@ -125,7 +125,7 @@ include './controller/conn.php';
 												</thead>
 												<tbody>
                                                   <?php
-                                                  $ambilDataUser = mysqli_query($conn,"SELECT user.id AS user_id, user.nama, user.email, user.no_telpon, role.nama_role FROM user INNER JOIN role ON role.id = user.role");
+                                                  $ambilDataUser = mysqli_query($conn,"SELECT user.id AS user_id, user.nama, user.email, user.no_telpon,user.photo AS photo,user.isActive as isActive, role.nama_role FROM user INNER JOIN role ON role.id = user.role WHERE role.nama_role !='admin'");
                                                   $i = 1;
 
                                                   while ($data = mysqli_fetch_array($ambilDataUser)) {
@@ -133,16 +133,29 @@ include './controller/conn.php';
                                                   ?>
                                                     <tr>
                                                         <td><?php echo $i?></td>
-														<td><img class="rounded-circle" width="35" src="images/profile/small/pic1.jpg" alt=""><span class="ml-2"><?php echo ucwords($data['nama'])?></span></td>
-														<td><?php echo $data['email']?></td>
+                                                        <?php if ($data['photo'] !=null) {
+                                                        ?>
+                                                        <td><img class="rounded-circle" width="35" src="images/profile/image-profile/<?php echo $data['photo'] ?>" alt=""><span class="ml-2"><?php echo ucwords($data['nama'])?></span></td>
+                                                        <?php }else{?>
+                                                            <td><img class="rounded-circle" width="35" src="images/profile/unit.png" alt=""><span class="ml-2"><?php echo ucwords($data['nama'])?></span></td>
+                                                        <?php }?>
 														<td><?php echo $data['no_telpon']?></td>
-														<td><?php echo $data['nama_role']?></td>
-														
-														<td><?php echo $data['nama_role']?></td>
+														<td><?php echo $data['email']?></td>
 														<td>
-															<a href="./editUser.php?id=<?php echo $data['user_id']?>" class="btn btn-sm btn-primary" ><i class="la la-pencil"></i></a>
-															<a href="detailUser.php?id=<?php echo $data['user_id']?>" class="btn btn-sm btn-warning"><i class="la la-eye text-white"></i></a>
-                                                            <a href="./controller/user/delete.php?id=<?php echo $data['user_id']?>" class="btn btn-sm btn-danger"><i class="la la-trash-o"></i></a>
+                                                            <?php if ($data['isActive']== true) {?>
+                                                                <a href="./controller/user/changeActive.php?id=<?php echo $data['user_id'] ?>"><span class="badge badge-xs light badge-success">Active</span></a>
+                                                                <?php } else{?>
+                                                                    <a href="./controller/user/changeActive.php?id=<?php echo $data['user_id'] ?>"><span class="badge badge-xs badge-danger light">Off</span></a>
+                                                            <?php }?>   
+                                                        </td>
+														
+														<td>
+                                                        <?php echo $data['nama_role']?>
+                                                        </td>
+														<td>
+															<a href="./editUser.php?id=<?php echo $data['user_id']?>" class="btn btn-sm btn-primary mb-2" ><i class="la la-pencil"></i></a>
+															<a href="detailUser.php?id=<?php echo $data['user_id']?>" class="btn btn-sm btn-warning mb-2"><i class="la la-eye text-white"></i></a>
+                                                            <a href="./controller/user/delete.php?id=<?php echo $data['user_id']?>" class="btn btn-sm btn-danger mb-2"><i class="la la-trash-o"></i></a>
 														</td>												
 													</tr>
                                                   <?php $i++?>

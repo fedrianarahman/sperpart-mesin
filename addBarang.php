@@ -23,7 +23,29 @@ if (!isset($_SESSION['nama'])) {
 	<link rel="stylesheet" href="vendor/bootstrap-select/dist/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/skin-2.css">
+    <style>
+        .card-body-replica{
+            display: flex;
+    justify-content: center;
+    align-items: center; /* Menengahkan vertikal (vertically center) */
+    overflow: hidden;
+        }
+      .picture-replica {
+    height: 200px;
+    width: 200px;
+    position: relative;
+    
+}
 
+ .picture-replica img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    margin: 0 auto; /* Menengahkan horizontal (horizontally center) */
+}
+
+
+    </style>
 </head>
 
 <body>
@@ -77,14 +99,14 @@ if (!isset($_SESSION['nama'])) {
             <div class="row page-titles mx-0">
                     <div class="col-sm-6 p-md-0">
                         <div class="welcome-text">
-                            <h4>Page</h4>
+                            <h4>Page </h4>
                         </div>
                     </div>
                     <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index.php">Home</a></li>
                             <li class="breadcrumb-item active"><a href="javascript:void(0);">Barang</a></li>
-                            <li class="breadcrumb-item active"><a href="javascript:void(0);">Barang</a></li>
+                            <li class="breadcrumb-item active"><a href="javascript:void(0);">Add</a></li>
                         </ol>
                     </div>
                 </div>
@@ -92,11 +114,28 @@ if (!isset($_SESSION['nama'])) {
                 <div class="col-lg-12">
                     <div class="card">
                     <div class="card-header">
-                                <h4 class="card-title">Add Barang</h4>
+                                <!-- <h4 class="card-title">Add Barang</h4> -->
                             </div>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form method="POST" action="./controller/barang/add.php">
+                                    <form method="POST" action="./controller/barang/add.php" enctype="multipart/form-data">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                <label for="">Photo Barang</label>
+                                                <input type="file" class="form-control input-default " placeholder="" name="photo" value="" onchange="readURL(this);">
+                                                 </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card shadow">
+                                                    <div class="card-body card-body-replica">
+                                                        <div class="picture-replica bg-primary">
+                                                            <img src="./images/barang/replika.png" id="picture-replika" alt="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                        <div class="row">
                                        <div class="col-md-6">
                                        <div class="form-group">
@@ -130,28 +169,44 @@ if (!isset($_SESSION['nama'])) {
                                             <input type="text" class="form-control input-default " placeholder="" name="satuan_barang" value="">
                                         </div>
                                        </div>
+                                       <?php
+                                       if ($_SESSION['role']!='manager') {?>
                                        <div class="col-md-6">
                                        <div class="form-group">
-                                            <label for="">awal</label>
+                                            <label for="">awal </label>
                                             <input type="number" class="form-control input-default " placeholder="" name="awal" value="">
                                         </div>
                                        </div>
+                                       <?php }?>
                                        <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="">masuk</label>
                                             <input type="number" class="form-control input-default " placeholder="" name="masuk" value="">
                                         </div>
                                        </div>
+                                       <?php
+                                       if ($_SESSION['role'] !='manager') {?>
                                        <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="">keluar</label>
                                             <input type="number" class="form-control input-default " placeholder="" name="keluar" value="">
                                         </div>
                                        </div>
+                                       <?php }?>
                                        <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="">akhir</label>
                                             <input type="number" class="form-control input-default " placeholder="" name="akhir" value="">
+                                        </div>
+                                       </div>
+                                       <div class="col-md-6">
+                                       <div class="form-group">
+                                            <label>Stock</label>
+                                            <select class="form-control"  name="stock">
+                                                <option>Plih</option>
+                                                <option value="take">take</option>
+                                                <option value="bppb">bppb</option>
+                                            </select>
                                         </div>
                                        </div>
                                        </div>
@@ -217,11 +272,22 @@ if (!isset($_SESSION['nama'])) {
 	
 		<!-- Demo scripts -->
     <script src="js/dashboard/dashboard-3.js"></script>
+    <script src="./js/jquery-3.5.1.min.js"></script>
+    <script>
+         function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+          $('#picture-replika')
+            .attr('src', e.target.result);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+    </script>
 	
-	<!-- Svganimation scripts -->
-    <script src="vendor/svganimation/vivus.min.js"></script>
-    <script src="vendor/svganimation/svg.animation.js"></script>
-    <script src="js/styleSwitcher.js"></script>
 	
 </body>
 </html>

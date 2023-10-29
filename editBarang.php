@@ -24,7 +24,29 @@ $kode = $_GET['kode_brg'];
 	<link rel="stylesheet" href="vendor/bootstrap-select/dist/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/skin-2.css">
+    <style>
+        .card-body-replica{
+            display: flex;
+    justify-content: center;
+    align-items: center; /* Menengahkan vertikal (vertically center) */
+    overflow: hidden;
+        }
+      .picture-replica {
+    height: 200px;
+    width: 200px;
+    position: relative;
+    
+}
 
+ .picture-replica img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    margin: 0 auto; /* Menengahkan horizontal (horizontally center) */
+}
+
+
+    </style>
 </head>
 
 <body>
@@ -103,7 +125,30 @@ $kode = $_GET['kode_brg'];
                                     $data = mysqli_fetch_array($ambilDataBarang);
                                     
                                     ?>
-                                    <form method="POST" action="./controller/barang/update.php">
+                                    <form method="POST" action="./controller/barang/update.php" enctype="multipart/form-data">
+                                        <div class="row">
+                                        <div class="col-md-6">
+                                                <div class="form-group">
+                                                <label for="">Photo Barang</label>
+                                                <input hidden type="file" class="form-control input-default " placeholder="" name="old_photo" value="<?php echo $data['photo'] ?>" onchange="readURL(this);">
+                                                <input type="file" class="form-control input-default " placeholder="" name="photo" value="" onchange="readURL(this);">
+                                                 </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card shadow">
+                                                    <div class="card-body card-body-replica">
+                                                        <div class="picture-replica bg-primary">
+                                                            <?php
+                                                            if ($data['photo']!= null) {?>
+                                                                <img src="./images/barang/<?php echo $data['photo'] ?>" id="picture-replika" alt="">
+                                                                <?php }else{?>
+                                                                    <img src="./images/barang/replika.png" id="picture-replika" alt="">
+                                                            <?php }?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                        <div class="row">
                                        <div class="col-md-6">
                                        <div class="form-group">
@@ -146,28 +191,48 @@ $kode = $_GET['kode_brg'];
                                             <input type="text" class="form-control input-default " placeholder="" name="satuan_barang" value="<?php echo $data['satuan']?>">
                                         </div>
                                        </div>
-                                       <div class="col-md-6">
+                                      <?php
+                                      if ($_SESSION['role'] != 'manager'){?>
+                                         <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="">awal</label>
-                                            <input type="number" class="form-control input-default " placeholder="" name="awal" value="<?php echo $data['awal']?>">
+                                            <input type="number" class="form-control input-default " placeholder="" name="awal" value="<?php echo $data['jumlah_awal']?>">
                                         </div>
                                        </div>
+                                      <?php }?>
                                        <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="">masuk</label>
-                                            <input type="number" class="form-control input-default " placeholder="" name="masuk" value="<?php echo $data['masuk']?>">
+                                            <input type="number" class="form-control input-default " placeholder="" name="masuk" value="<?php echo $data['jumlah_masuk']?>">
                                         </div>
                                        </div>
+                                       <?php
+                                       if ($_SESSION['role'] != 'manager') {?>
                                        <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="">keluar</label>
-                                            <input type="number" class="form-control input-default " placeholder="" name="keluar" value="<?php echo $data['keluar']?>">
+                                            <input type="number" class="form-control input-default " placeholder="" name="keluar" value="<?php echo $data['jumlah_keluar']?>">
+                                        </div>
+                                       </div>
+                                       <?php }?>
+                                       <div class="col-md-6">
+                                       <div class="form-group">
+                                            <label for="">akhir</label>
+                                            <input type="number" class="form-control input-default " placeholder="" name="akhir" value="<?php echo $data['jumlah_akhir']?>">
                                         </div>
                                        </div>
                                        <div class="col-md-6">
                                        <div class="form-group">
-                                            <label for="">akhir</label>
-                                            <input type="number" class="form-control input-default " placeholder="" name="akhir" value="<?php echo $data['akhir']?>">
+                                            <label>Stock</label>
+                                            <select class="form-control"  name="stock">
+                                                <option>Plih</option>
+                                                <option value="take" <?php if ($data['stock']=='take') {
+                                                    echo 'selected';
+                                                }  ?>>take</option>
+                                                <option value="bppb" <?php if ($data['stock']=='bppb') {
+                                                    echo 'selected';
+                                                } ?>>bppb</option>
+                                            </select>
                                         </div>
                                        </div>
                                        </div>
@@ -234,10 +299,21 @@ $kode = $_GET['kode_brg'];
 		<!-- Demo scripts -->
     <script src="js/dashboard/dashboard-3.js"></script>
 	
-	<!-- Svganimation scripts -->
-    <script src="vendor/svganimation/vivus.min.js"></script>
-    <script src="vendor/svganimation/svg.animation.js"></script>
-    <script src="js/styleSwitcher.js"></script>
+    <script src="./js/jquery-3.5.1.min.js"></script>
+    <script>
+         function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+          $('#picture-replika')
+            .attr('src', e.target.result);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+    </script>
 	
 </body>
 </html>

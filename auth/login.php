@@ -11,7 +11,7 @@ if (isset($_POST['submit'])) {
     $_SESSION['id_user'] = $user['id'];
     $loggedIn = false; // Flag untuk menandakan status login
     while ($result = mysqli_fetch_array($cekDataUser)) {
-        if ($username == $result['username'] && $password == $result['password']) {
+        if ($username == $result['username'] && $password == $result['password'] && $result['isActive']== true) {
             $loggedIn = true;
             $_SESSION['nama'] = $result['nama'];
             $_SESSION['email'] = $result['email'];
@@ -66,10 +66,16 @@ if (isset($_POST['submit'])) {
                                             <label><strong>Password</strong></label>
                                             <input type="password" class="form-control" value="" name="password">
                                         </div>
+                                        <div class="mt-2 ">
+                                            <a href="./forgotPassword.php" class="float-right mb-4">Lupa Password ?</a>
+                                        </div>
                                         <div class="text-center">
                                             <button type="submit" class="btn btn-primary btn-block" name="submit">Sign in</button>
                                         </div>
                                     </form>
+                                    <div class="new-account mt-3">
+                                        <p>Belum Punya Akun ? <a href="./register.php" class="text-primary">Registrasi Disini !</a></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

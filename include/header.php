@@ -1,3 +1,20 @@
+<?php
+session_start();
+include './controller/conn.php';
+?>
+<style>
+    .role-jabatan {
+        position: absolute; 
+    bottom: 0;
+    left: 0; 
+    width: 100%; 
+    text-align: center;
+    font-size: 12px;
+    margin: 10px 0;
+    color:#B2C8BA ;
+    
+    }
+</style>
 <div class="header">
             <div class="header-content">
                 <nav class="navbar navbar-expand">
@@ -5,85 +22,44 @@
                         <div class="header-left">
                             <div class="search_bar dropdown">
                                 <span class="search_icon p-3 c-pointer" data-toggle="dropdown">
-                                    <i class="mdi mdi-magnify"></i>
+                                    <!-- <i class="mdi mdi-magnify"></i> -->
                                 </span>
                                 <div class="dropdown-menu p-0 m-0">
                                     <form>
-                                        <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                                        <input class="form-control"  hidden type="search" placeholder="Search" aria-label="Search">
                                     </form>
                                 </div>
                             </div>
                         </div>
 
                         <ul class="navbar-nav header-right">
+                            <?php
+                                $idUser = $_SESSION['id_user'];
+                                $getDataUser = mysqli_query($conn, "SELECT * FROM user INNER JOIN role ON role.id = user.role WHERE user.id = '$idUser'");
+                                while ($dataUser = mysqli_fetch_array($getDataUser)) {
+                                    
+                            ?>
                             <li class="nav-item dropdown notification_dropdown">
                                 <a class="nav-link bell ai-icon" href="#" role="button" data-toggle="dropdown">
-                                    <svg id="icon-user" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell">
-										<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-										<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-									</svg>
-                                    <div class="pulse-css"></div>
+                                    <?php echo ucwords($dataUser['nama']) ?>
+                                    <!-- <div class="pulse-css"></div> color:#B2C8BA ;-->
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <ul class="list-unstyled">
-                                        <li class="media dropdown-item">
-                                            <span class="success"><i class="ti-user"></i></span>
-                                            <div class="media-body">
-                                                <a href="#">
-                                                    <p><strong>Martin</strong> has added a <strong>customer</strong> Successfully
-                                                    </p>
-                                                </a>
-                                            </div>
-                                            <span class="notify-time">3:20 am</span>
-                                        </li>
-                                        <li class="media dropdown-item">
-                                            <span class="primary"><i class="ti-shopping-cart"></i></span>
-                                            <div class="media-body">
-                                                <a href="#">
-                                                    <p><strong>Jennifer</strong> purchased Light Dashboard 2.0.</p>
-                                                </a>
-                                            </div>
-                                            <span class="notify-time">3:20 am</span>
-                                        </li>
-                                        <li class="media dropdown-item">
-                                            <span class="danger"><i class="ti-bookmark"></i></span>
-                                            <div class="media-body">
-                                                <a href="#">
-                                                    <p><strong>Robin</strong> marked a <strong>ticket</strong> as unsolved.
-                                                    </p>
-                                                </a>
-                                            </div>
-                                            <span class="notify-time">3:20 am</span>
-                                        </li>
-                                        <li class="media dropdown-item">
-                                            <span class="primary"><i class="ti-heart"></i></span>
-                                            <div class="media-body">
-                                                <a href="#">
-                                                    <p><strong>David</strong> purchased Light Dashboard 1.0.</p>
-                                                </a>
-                                            </div>
-                                            <span class="notify-time">3:20 am</span>
-                                        </li>
-                                        <li class="media dropdown-item">
-                                            <span class="success"><i class="ti-image"></i></span>
-                                            <div class="media-body">
-                                                <a href="#">
-                                                    <p><strong> James.</strong> has added a<strong>customer</strong> Successfully
-                                                    </p>
-                                                </a>
-                                            </div>
-                                            <span class="notify-time">3:20 am</span>
-                                        </li>
-                                    </ul>
-                                    <a class="all-notification" href="#">See all notifications <i class="ti-arrow-right"></i></a>
-                                </div>
+                                <span class="role-jabatan"><?php echo ucwords($dataUser['nama_role']) ?></span>
+                                
                             </li>
+                            
                             <li class="nav-item dropdown header-profile">
                                 <a class="nav-link" href="#" role="button" data-toggle="dropdown">
-                                    <img src="images/profile/education/pic1.jpg" width="20" alt="">
+                                    <?php
+                                    if ($dataUser['photo'] != null) {
+                                     ?>
+                                       <img src="./images/profile/image-profile/<?php echo $dataUser['photo'] ?>" alt="" id="blah" class="picture-src">
+                                     <?php }else{ ?>
+                                        <img src="images/profile/unit.png" width="20" alt="">
+                                        <?php }?>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <a href="app-profile.html" class="dropdown-item ai-icon">
+                                    <a href="./profilePage.php" class="dropdown-item ai-icon">
                                         <svg id="icon-user1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                                         <span class="ml-2">Profile </span>
                                     </a>
@@ -93,6 +69,7 @@
                                     </a>
                                 </div>
                             </li>
+                            <?php }?>
                         </ul>
                     </div>
                 </nav>
