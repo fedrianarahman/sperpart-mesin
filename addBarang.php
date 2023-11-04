@@ -43,8 +43,6 @@ if (!isset($_SESSION['nama'])) {
     display: block;
     margin: 0 auto; /* Menengahkan horizontal (horizontally center) */
 }
-
-
     </style>
 </head>
 

@@ -53,7 +53,7 @@ function upload() {
     }
 
     // cek ukuran gambar jika terlalu besar
-    if ($ukuranFile > 1000000) {
+    if ($ukuranFile > 5000000) {
         $_SESSION['status-fail'] = "Ukuran Gambar Terlalu Besar";
         return false;
     }

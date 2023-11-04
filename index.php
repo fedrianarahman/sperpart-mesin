@@ -1,5 +1,6 @@
 <?php
 session_start();
+include './controller/conn.php';
 // Cek apakah sesi login telah diatur
 if (!isset($_SESSION['nama'])) {
     header("Location: ./auth/login.php");
@@ -67,8 +68,73 @@ if (!isset($_SESSION['nama'])) {
             Content body start
         ***********************************-->
         <div class="content-body">
-            <!-- row -->
-           <!-- <?php echo $_SESSION['id_user']?> -->
+            <div class="container-fluid">
+                <div class="row">
+                <div class="col-md-4">
+						<a href="./dataUser.php">
+                        <div class="widget-stat card shadow-sm">
+							<div class="card-body">
+								<div class="media">
+									<span class="mr-3" >
+										<i class="fa fa-users" style=""></i>
+									</span>
+									<div class="media-body ">
+										<p class="mb-1" >Total users</p>
+                                        <?php
+                                        $getDataUser = mysqli_query($conn ,"SELECT * FROM user WHERE role != '26'");
+                                        $dataUser = mysqli_num_rows($getDataUser);
+                                        ?>
+										<h3 class=""><?= $dataUser; ?></h3>
+									</div>
+								</div>
+							</div>
+						</div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+						<a href="./dataBarang.php">
+                        <div class="widget-stat card shadow-sm">
+							<div class="card-body">
+								<div class="media">
+									<span class="mr-3" >
+										<i class="fa fa-users" style=""></i>
+									</span>
+									<div class="media-body ">
+										<p class="mb-1" >Total Barang</p>
+                                        <?php
+                                        $getDataBarang = mysqli_query($conn, "SELECT * FROM tb_barang");
+                                        $dataBarang = mysqli_num_rows($getDataBarang);
+                                        ?>
+										<h3 class=""><?= $dataBarang; ?></h3>
+									</div>
+								</div>
+							</div>
+						</div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+						<a href="./dataPermintaan.php">
+                        <div class="widget-stat card shadow-sm">
+							<div class="card-body">
+								<div class="media">
+									<span class="mr-3" >
+										<i class="fa fa-users" style=""></i>
+									</span>
+									<div class="media-body ">
+										<p class="mb-1" >Total Permintaan</p>
+                                        <?php
+                                        $getdataPermintaan = mysqli_query($conn, "SELECT * FROM tb_permintaan");
+                                        $dataPermintaan = mysqli_num_rows($getdataPermintaan);
+                                        ?>
+										<h3 class=""><?= $dataPermintaan; ?></h3>
+									</div>
+								</div>
+							</div>
+						</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
         <!--**********************************
             Content body end
@@ -122,10 +188,7 @@ if (!isset($_SESSION['nama'])) {
 		<!-- Demo scripts -->
     <script src="js/dashboard/dashboard-3.js"></script>
 	
-	<!-- Svganimation scripts -->
-    <script src="vendor/svganimation/vivus.min.js"></script>
-    <script src="vendor/svganimation/svg.animation.js"></script>
-    <script src="js/styleSwitcher.js"></script>
+
 	
 </body>
 </html>

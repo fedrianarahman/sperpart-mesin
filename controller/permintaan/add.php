@@ -4,22 +4,39 @@ include '../conn.php';
 
 $id_user = $_SESSION['id_user'];
 $nama_teknisi = $_POST['nama_teknisi'];
-$nama_barang = $_POST['nama_barang'];
+$kode_barang = $_POST['kode_barang'];
 $jumlah_barang = $_POST['jumlah_barang'];
 
-if (isset($_FILES['surat_request'])) {
-    $filename = $_FILES["surat_request"]["name"];
-    $tempname = $_FILES["surat_request"]["tmp_name"];  
-    $folder = "C:\wamp64\www\project\sperpart-mesin\images\surat_permintaan/".$filename;   
-    move_uploaded_file($tempname, $folder);
+// cek ketersediaan barang
+$cekJumlahBarang = mysqli_query($conn, "SELECT * FROM tb_barang WHERE kode_barang = '$kode_barang'");
+$r = mysqli_fetch_array($cekJumlahBarang);
+$namaBarang = $r['nama_barang'];
+$jumlahStock = $r['jumlah_masuk'];
+$sisaStock = $r['jumlah_masuk'] - $jumlah_barang;
+// $created_at = date('Y:m:d H:i:s');
 
-    $result = mysqli_query($conn, "INSERT INTO `tb_permintaan` (`id`, `id_user`,`nama_teknisi` , `nama_barang`, `jumlah_barang`, `surat_request`) VALUES ('', '$id_user', '$nama_teknisi', '$nama_barang','$jumlah_barang','$filename')");
+if ($jumlah_barang > $r['jumlah_masuk']) {
+    $_SESSION['status-fail'] = "Jumlah Permintaan Melebihi Stock Yang Ada";
+    header("Location:../../addPermintaan.php");
+} else {
+    
+    $addRequest = mysqli_query($conn, "INSERT INTO `tb_permintaan`(`id`, `nama_barang`, `id_user`, `nama_teknisi`, `jumlah_barang`, `status`) VALUES ('','$namaBarang','$id_user','$nama_teknisi','$jumlah_barang','P')");
 
-    if($result) {
-        $_SESSION['status-info'] = "Permintaan Berhasil DiUpdate";
+    if ($addRequest) {
+
+        $updateStockBarang = mysqli_query($conn, "UPDATE tb_barang SET jumlah_masuk = '$sisaStock', jumlah_keluar = '$jumlah_barang' WHERE kode_barang = '$kode_barang'");
+        if ($updateStockBarang) {
+            $_SESSION['status-info'] = "Permintaan Berhasil, Silahkan Tunggu Konfirmasi";
+        } else {
+            $_SESSION['status-fail'] = "Permintaan Gagal";
+        }
+        
     } else {
-        $_SESSION['status-fail'] = "Permintaan Tidak Berhasil DiUpdate";
+        $_SESSION['status-fail'] = "Permintaan Gagal";
     }
+    
+    header("Location:../../dataPermintaan.php");
 }
-header("Location:../../dataPermintaan.php");
+
+
 ?>

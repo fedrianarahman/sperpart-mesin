@@ -2,17 +2,7 @@
 session_start();
 include './controller/conn.php';
 $id = $_GET['id'];
-if($id) {
-    $getData = mysqli_query($conn, "SELECT * FROM `tb_permintaan` WHERE `id`='$id'");
-    $data = mysqli_fetch_array($getData);
-    if($getData) {
-        echo "berhasil";
-} else {
-        echo "error";
-    }
-} else {
-    header("Location:../../dataPermintaan.php");    
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -82,21 +72,38 @@ if($id) {
         <div class="content-body">
             <!-- row -->
             <div class="container-fluid">
+            <?php
+            $getDataPermintaan = mysqli_query($conn, "SELECT tb_permintaan.nama_barang AS nama_barang, tb_permintaan.id AS id_permintaan, tb_permintaan.jumlah_barang AS jumlah_barang, user.nama AS nama, tb_barang.photo AS photo
+            FROM tb_permintaan
+            INNER JOIN user ON user.id = tb_permintaan.id_user
+            INNER JOIN tb_barang ON tb_barang.nama_barang = tb_permintaan.nama_barang
+            WHERE tb_permintaan.id = '$id'
+            ");
+            while ($data = mysqli_fetch_array($getDataPermintaan)) {?>
             <div class="row">
                 <div class="col-lg-4">
                     <div class="card">
                         <div class="card-body text-center">
-                            <h6>Surat Permintaan (Klik gambar)</h6>
-                            <a href="./images/surat_permintaan/<?= $data['surat_request'] ?>" target="_blank">
-                                <img src="./images/surat_permintaan/<?= $data['surat_request'] ?>" class="img-fluid" alt="">
+                            <?php
+                            if ($data['photo'] != null) {?>
+                            <a href="./images/barang/<?= $data['photo'] ?>" class="mb-4" target="_blank">
+                                <img src="./images/barang/<?= $data['photo'] ?>" class="img-fluid" alt="">
                             </a>
+                            <p>pppppp</p>
+                            <?php }else{?>
+                                <a href="./images/barang/replika.png" class="mb-4" target="_blank">
+                                <img src="./images/barang/replika.png" class="img-fluid" alt="">
+                            </a>
+                            <p>ppppppp</p>
+                            <?php }?>
+                            <!-- <h6>Surat Permintaan (Klik gambar)</h6> -->
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-8">
                     <div class="card">
                     <div class="card-header">
-                                <h4 class="card-title">Detail Permintaan</h4>
+                                <h4 class="card-title">Detail Permintaan </h4>
                             </div>
                             <div class="card-body">
                                 <div class="basic-form">
@@ -104,10 +111,17 @@ if($id) {
                                        <div class="row">
                                        <div class="col-md-6">
                                        <div class="form-group">
-                                            <label for="">Nama Teknisi</label>
-                                            <input type="text" class="form-control input-default " placeholder="" name="nama_teknisi" value="<?= $data['nama_teknisi'] ?>" readonly>
+                                            <label for="">Nama Teknisi </label>
+                                            <input type="text" class="form-control input-default " placeholder="" name="nama_teknisi" value="<?= $data['nama'] ?>" readonly>
                                         </div>
                                        </div>
+                                       <div class="col-md-6">
+                                       <div class="form-group">
+                                            <label for="">Nama Barang </label>
+                                            <input type="text" class="form-control input-default " placeholder="" name="nama_teknisi" value="<?= $data['nama_barang'] ?>" readonly>
+                                        </div>
+                                       </div>
+                                       
                                        <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="jumlah_barang">Jumlah</label>
@@ -115,20 +129,18 @@ if($id) {
                                         </div>
                                        </div>
                                        <div class="col-md-12">
-                                        <div class="form-group">
-                                                <label for="surat_request">Surat Permintaan</label> 
-                                                <input type="file" class="mb-1 form-control input-default" placeholder="" name="surat_request" value="" readonly>
-                                                <p class="text-small text-danger">surat permintaan betuk harus bentuk foto/gambar</p>
-                                            </div>
-                                            </div>
+                                        
+                                        </div>
                                        </div>
                                         <a href="./dataPermintaan.php" class="btn btn-warning text-white">Kembali</a>
+                                        <a href="#" class="btn float-right btn-success text-white">Konfirmasi</a>
                                     </form>
                                 </div>
                             </div>
                     </div>
                 </div>
             </div>
+            <?php }?>
             </div>
         
         </div>
@@ -183,11 +195,6 @@ if($id) {
 	
 		<!-- Demo scripts -->
     <script src="js/dashboard/dashboard-3.js"></script>
-	
-	<!-- Svganimation scripts -->
-    <script src="vendor/svganimation/vivus.min.js"></script>
-    <script src="vendor/svganimation/svg.animation.js"></script>
-    <script src="js/styleSwitcher.js"></script>
 	
 </body>
 </html>

@@ -19,7 +19,27 @@ include './controller/conn.php';
 	<link rel="stylesheet" href="vendor/bootstrap-select/dist/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/skin-2.css">
+    <style>
+        .card-body-replica{
+            display: flex;
+    justify-content: center;
+    align-items: center; /* Menengahkan vertikal (vertically center) */
+    overflow: hidden;
+        }
+      .picture-replica {
+    height: 200px;
+    width: 200px;
+    position: relative;
+    
+}
 
+ .picture-replica img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    margin: 0 auto; /* Menengahkan horizontal (horizontally center) */
+}
+    </style>
 </head>
 
 <body>
@@ -72,6 +92,26 @@ include './controller/conn.php';
             <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
+                <?php
+                        if (isset($_SESSION['status-info'])) {
+                            echo '
+                            <div class="alert alert-success alert-dismissible fade show">
+                            <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
+                            </button>
+                            <strong>Success!</strong> '.$_SESSION['status-info'].'
+                        </div>';
+                            unset($_SESSION['status-info']);
+                        }
+                        if (isset($_SESSION['status-fail'])) {
+                            echo '
+                            <div class="alert alert-danger  alert-dismissible fade show">
+                                    <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
+                                    </button>
+                                    <strong>Gagal!</strong> '.$_SESSION['status-fail'].'
+                                </div>';
+                            unset($_SESSION['status-fail']);
+                        }
+                        ?>
                     <div class="card">
                     <div class="card-header">
                                 <h4 class="card-title">Tambah Permintaan</h4>
@@ -80,21 +120,17 @@ include './controller/conn.php';
                                 <div class="basic-form">
                                     <form method="POST" action="./controller/permintaan/add.php" enctype="multipart/form-data"> 
                                        <div class="row">
-                                       <div class="col-md-6">
-                                       <div class="form-group">
-                                            <label for="">Nama Teknisi</label>
-                                            <input type="text" class="form-control input-default " placeholder="" name="nama_teknisi" value="" required>
-                                        </div>
-                                       </div>
+                                       
                                        <div class="col-md-6">
                                         <div class="form-group">
                                                 <label for="nama_barang">Barang</label>
-                                                <select name="nama_barang" class="form-control input-default " id="nama_barang" required>
+                                                <select name="kode_barang" class="form-control nama_barang input-default " id="nama_barang" required>
+                                                    <option value="">Pilih</option>
                                                 <?php 
                                                         $getBarang = mysqli_query($conn, "SELECT * FROM `tb_barang`");
                                                         while ($barang = mysqli_fetch_array($getBarang)) {
                                                 ?>
-                                                    <option value="<?= $barang['nama_barang']; ?>"><?= $barang['nama_barang'] ?></option>
+                                                    <option value="<?= $barang['kode_barang']; ?>"><?= $barang['nama_barang'] ?></option>
                                                 <?php } ?>
                                                 </select>
                                             </div>
@@ -103,17 +139,18 @@ include './controller/conn.php';
                                        <div class="form-group">
                                             <label for="jumlah_barang">Jumlah</label>
                                             <input type="number" class="form-control input-default " placeholder="" name="jumlah_barang" value="" required>
+                                            <input hidden type="text" name="nama_teknisi" value="<?php echo $_SESSION['nama']  ?>">
+                                            <input hidden type="text" name="user_id" value="<?php echo $_SESSION['id_user']  ?>">
                                         </div>
                                        </div>
-                                       <div class="col-md-6">
-                                        <div class="form-group">
-                                                <label for="surat_request">Surat Permintaan</label>
-                                                <input type="file" class="mb-1 form-control input-default" placeholder="" name="surat_request" value="" required>
-                                                <p class="text-small text-danger">surat permintaan betuk harus bentuk foto/gambar</p>
-                                            </div>
+                                       
+                                       </div>
+                                       <div class="row">
+                                            <div class="col-md-6">
+                                            <div class="picture-image"></div>
                                             </div>
                                        </div>
-                                        <a href="./dataPermintaanr.php" class="btn btn-warning text-white">Kembali</a>
+                                        <a href="./dataPermintaan.php" class="btn btn-warning text-white">Kembali</a>
                                       <button class="btn float-right btn-primary" type="submit">Tambah</button>
                                     </form>
                                 </div>
@@ -176,10 +213,7 @@ include './controller/conn.php';
 		<!-- Demo scripts -->
     <script src="js/dashboard/dashboard-3.js"></script>
 	
-	<!-- Svganimation scripts -->
-    <script src="vendor/svganimation/vivus.min.js"></script>
-    <script src="vendor/svganimation/svg.animation.js"></script>
-    <script src="js/styleSwitcher.js"></script>
-	
+	<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="./js/data/dataAddPermintaan.js"></script>
 </body>
 </html>

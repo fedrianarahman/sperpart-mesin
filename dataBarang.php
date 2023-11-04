@@ -125,7 +125,7 @@ include './controller/conn.php';
 														<th>Merk</th>
 														<th>Rak</th>
 														<th>Sat</th>
-														<th>Awal</th>
+														<th>Stock Barang</th>
                                                         <th>Masuk</th>
                                                         <th>Keluar</th>
                                                         <th>Akhir</th>
@@ -150,7 +150,12 @@ include './controller/conn.php';
                                                         <td><?php echo $data['jumlah_keluar']?></td>
                                                         <td><?php echo $data['jumlah_akhir']?></td>
                                                         <td>
-                                                            <a href="./detailBarang.php?kode_barang=<?php echo $data['kode_barang']?>" class="btn btn-sm mb-2 btn-warning"><i class="la la-eye text-white"></i></a>
+                                                            <a href="./detailBarang.php?kode_barang=<?php echo $data['kode_barang']?>" class="btn btn-sm mb-2 btn-warning"><i class="la la-eye text-white"></i>
+                                                            </a>
+                                                            <?php if($_SESSION['role']=='operator gudang'){?>
+                                                               
+                                                                <a href="./editBarang.php?kode_brg=<?php echo $data['kode_barang']?>" class="btn btn-sm mb-2 btn-primary" ><i class="la la-pencil"></i></a>
+                                                            <?php }?>
                                                             <?php if ($_SESSION['role']=='manager' || $_SESSION['role'] =='admin') {
                                                             
                                                             ?>
@@ -208,9 +213,6 @@ include './controller/conn.php';
     <script src="vendor/datatables/js/jquery.dataTables.min.js"></script>
     <script src="js/plugins-init/datatables.init.js"></script>
 	
-    <!-- Svganimation scripts -->
-    <script src="vendor/svganimation/vivus.min.js"></script>
-    <script src="vendor/svganimation/svg.animation.js"></script>
-    <script src="js/styleSwitcher.js"></script>
+   
 </body>
 </html>
