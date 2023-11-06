@@ -89,12 +89,12 @@ $id = $_GET['id'];
                             <a href="./images/barang/<?= $data['photo'] ?>" class="mb-4" target="_blank">
                                 <img src="./images/barang/<?= $data['photo'] ?>" class="img-fluid" alt="">
                             </a>
-                            <p>pppppp</p>
+                            <p class="mt-4"><?php echo $data['nama_barang'] ?></p>
                             <?php }else{?>
                                 <a href="./images/barang/replika.png" class="mb-4" target="_blank">
                                 <img src="./images/barang/replika.png" class="img-fluid" alt="">
                             </a>
-                            <p>ppppppp</p>
+                            <p class="mt-4"><?php echo $data['nama_barang'] ?></p>
                             <?php }?>
                             <!-- <h6>Surat Permintaan (Klik gambar)</h6> -->
                         </div>
@@ -107,20 +107,21 @@ $id = $_GET['id'];
                             </div>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form method="POST" action="#" enctype="multipart/form-data"> 
+                                    <form method="POST" action="./controller/permintaan/staff/konfirmasi.php" enctype="multipart/form-data"> 
                                        <div class="row">
                                        <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="">Nama Teknisi </label>
                                             <input type="text" class="form-control input-default " placeholder="" name="nama_teknisi" value="<?= $data['nama'] ?>" readonly>
+                                            <input hidden type="text" class="form-control input-default " placeholder="" name="id_permintaan" value="<?= $data['id_permintaan'] ?>" readonly>
                                         </div>
                                        </div>
-                                       <div class="col-md-6">
+                                       <!-- <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="">Nama Barang </label>
                                             <input type="text" class="form-control input-default " placeholder="" name="nama_teknisi" value="<?= $data['nama_barang'] ?>" readonly>
                                         </div>
-                                       </div>
+                                       </div> -->
                                        
                                        <div class="col-md-6">
                                        <div class="form-group">
@@ -133,7 +134,8 @@ $id = $_GET['id'];
                                         </div>
                                        </div>
                                         <a href="./dataPermintaan.php" class="btn btn-warning text-white">Kembali</a>
-                                        <a href="#" class="btn float-right btn-success text-white">Konfirmasi</a>
+                                        <button class="btn float-right btn-success text-white">Konfirmasi</button>
+                                        
                                     </form>
                                 </div>
                             </div>
