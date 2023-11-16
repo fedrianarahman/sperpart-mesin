@@ -167,7 +167,7 @@ if (!isset($_SESSION['nama'])) {
                                             <input type="text" class="form-control input-default " placeholder="" name="satuan_barang" value="">
                                         </div>
                                        </div>
-                                       <?php
+                                       <!-- <?php
                                        if ($_SESSION['role']!='manager') {?>
                                        <div class="col-md-6">
                                        <div class="form-group">
@@ -175,14 +175,14 @@ if (!isset($_SESSION['nama'])) {
                                             <input type="number" class="form-control input-default " placeholder="" name="awal" value="">
                                         </div>
                                        </div>
-                                       <?php }?>
+                                       <?php }?> -->
                                        <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="">masuk</label>
                                             <input type="number" class="form-control input-default " placeholder="" name="masuk" value="">
                                         </div>
                                        </div>
-                                       <?php
+                                       <!-- <?php
                                        if ($_SESSION['role'] !='manager') {?>
                                        <div class="col-md-6">
                                        <div class="form-group">
@@ -190,13 +190,13 @@ if (!isset($_SESSION['nama'])) {
                                             <input type="number" class="form-control input-default " placeholder="" name="keluar" value="">
                                         </div>
                                        </div>
-                                       <?php }?>
-                                       <div class="col-md-6">
+                                       <?php }?> -->
+                                       <!-- <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="">akhir</label>
                                             <input type="number" class="form-control input-default " placeholder="" name="akhir" value="">
                                         </div>
-                                       </div>
+                                       </div> -->
                                        <div class="col-md-6">
                                        <div class="form-group">
                                             <label>Stock</label>

@@ -102,14 +102,22 @@ include './controller/conn.php';
 												<thead>
 													<tr>
 														<th>#</th>
-                                                        <?php if ($_SESSION['role']=='staff gudang' || $_SESSION['role'] == 'manager' || $_SESSION['role'] =='admin'){ ?>
+                                                        <?php if ($_SESSION['role']=='staff gudang' || $_SESSION['role'] == 'manager' || $_SESSION['role'] =='admin' || $_SESSION['role'] =='operator gudang'){ ?>
                                                             <th>Nama Teknisi </th>
+                                                        <?php }?>
+                                                        <?php if ($_SESSION['role']=='operator gudang' || $_SESSION['role'] =='admin' || $_SESSION['role']=='manager') {?>
+                                                            <th>Staff</th>
+                                                        <?php }?>
+                                                        <?php if ($_SESSION['role'] =='admin' || $_SESSION['role']=='manager') {?>
+                                                            <th>Operator</th>
                                                         <?php }?>
 														<th>Nama Barang</th>
 														<th>Jumlah</th>
 														<th>Status</th>
 														<th>Tanggal</th>
-                                                        <th class="text-center">Aksi</th>
+                                                        <?php if ($_SESSION['role']=='teknisi' || $_SESSION['role']=='staff gudang' || $_SESSION['role'] =='admin' || $_SESSION['role']=='manager') {?>
+                                                            <th class="text-center">Aksi</th>
+                                                        <?php }?>
 													</tr>
 												</thead>
 												<tbody>
@@ -117,18 +125,63 @@ include './controller/conn.php';
                                                     $userId = $_SESSION['id_user'];
                                                     if ($_SESSION['role'] == 'teknisi') {
                                                         $getDataPermintaan = mysqli_query($conn, "SELECT tb_permintaan.created_at AS created_at,tb_permintaan.id AS id_permintaan,tb_permintaan.jumlah_barang AS jumlah_barang, tb_permintaan.status AS status, user.nama AS nama, tb_barang.nama_barang AS nama_barang FROM tb_permintaan INNER JOIN user ON user.id = tb_permintaan.id_user INNER JOIN tb_barang ON tb_barang.nama_barang = tb_permintaan.nama_barang WHERE tb_permintaan.id_user = '$userId'");
-                                                    }elseif($_SESSION['role'] == 'staff gudang'){
-                                                        $getDataPermintaan = mysqli_query($conn, "SELECT tb_permintaan.created_at AS created_at,tb_permintaan.id AS id_permintaan,tb_permintaan.jumlah_barang AS jumlah_barang, tb_permintaan.status AS status, user.nama AS nama, tb_barang.nama_barang AS nama_barang FROM tb_permintaan INNER JOIN user ON user.id = tb_permintaan.id_user INNER JOIN tb_barang ON tb_barang.nama_barang = tb_permintaan.nama_barang ");
+                                                    }elseif($_SESSION['role'] == 'staff gudang'     ){
+                                                        $getDataPermintaan = mysqli_query($conn, "SELECT tb_permintaan.created_at AS created_at,tb_permintaan.id AS id_permintaan,tb_permintaan.jumlah_barang AS jumlah_barang, tb_permintaan.status AS status, user.nama AS nama_teknisi, tb_barang.nama_barang AS nama_barang FROM tb_permintaan INNER JOIN user ON user.id = tb_permintaan.id_user INNER JOIN tb_barang ON tb_barang.nama_barang = tb_permintaan.nama_barang WHERE tb_permintaan.status= 'P' OR tb_permintaan.status =  'A-'");
+                                                    }elseif($_SESSION['role'] == 'operator gudang'){
+                                                        $getDataPermintaan = mysqli_query($conn, "SELECT 
+                                                        tb_permintaan.created_at AS created_at,
+                                                        tb_permintaan.id AS id_permintaan,
+                                                        tb_permintaan.jumlah_barang AS jumlah_barang, 
+                                                        tb_permintaan.status AS status, 
+                                                        u1.nama AS nama_teknisi, 
+                                                        u2.nama AS nama_staff, 
+                                                        tb_barang.nama_barang AS nama_barang 
+                                                    FROM 
+                                                        tb_permintaan 
+                                                    INNER JOIN 
+                                                        user u1 ON u1.id = tb_permintaan.id_user 
+                                                    INNER JOIN 
+                                                        user u2 ON u2.id = tb_permintaan.accepter 
+                                                    INNER JOIN 
+                                                        tb_barang ON tb_barang.nama_barang = tb_permintaan.nama_barang 
+                                                    WHERE  
+                                                        tb_permintaan.status = 'A-'
+                                                    OR tb_permintaan.status = 'A+'    
+                                                    ");
                                                     }elseif($_SESSION['role'] == 'manager'){
-                                                        $getDataPermintaan = mysqli_query($conn, "SELECT tb_permintaan.id AS id_permintaan, tb_permintaan.nama_barang AS nama_barang,tb_permintaan.jumlah_barang AS jumlah_barang, tb_permintaan.status AS status, tb_permintaan.created_at AS created_at, user.nama AS nama FROM tb_permintaan INNER JOIN user ON user.id = tb_permintaan.id_user");
+                                                        $getDataPermintaan = mysqli_query($conn, "SELECT tb_permintaan.created_at as created_at,
+                                                        tb_permintaan.id AS id_permintaan,
+                                                        tb_permintaan.jumlah_barang AS jumlah_barang,
+                                                        tb_permintaan.status AS status,
+                                                        u1.nama AS nama_teknisi,
+                                                        u2.nama AS nama_staff,
+                                                        u3.nama AS nama_operator,
+                                                        tb_barang.nama_barang AS nama_barang
+                                                        FROM 
+                                                            tb_permintaan
+                                                        LEFT JOIN
+                                                            user u1 ON u1.id = tb_permintaan.id_user
+                                                        LEFT JOIN 
+                                                            user u2 ON u2.id = tb_permintaan.accepter
+                                                        LEFT JOIN 
+                                                            user u3 ON u3.id = tb_permintaan.operator
+                                                        LEFT JOIN 
+                                                            tb_barang ON tb_barang.nama_barang = tb_permintaan.nama_barang        
+                                                        ");
                                                     }
                                                     $i =1;
                                                     while ($data = mysqli_fetch_array($getDataPermintaan)) {
                                                      ?>
                                                     <tr>
                                                         <td><?php echo $i++; ?></td>
-                                                        <?php if ($_SESSION['role']=='staff gudang' || $_SESSION['role'] == 'manager'){?>
-                                                            <td><?php echo $data['nama'] ?></td>
+                                                        <?php if ($_SESSION['role']=='staff gudang' || $_SESSION['role'] == 'manager' || $_SESSION['role']=='operator gudang'){?>
+                                                            <td><?php echo $data['nama_teknisi'] ?></td>
+                                                        <?php }?>
+                                                        <?php if ($_SESSION['role']=='operator gudang' || $_SESSION['role']=='admin' || $_SESSION['role']=='manager') {?>
+                                                            <td><?php echo $data['nama_staff'] ?></td>
+                                                        <?php }?>
+                                                        <?php if ( $_SESSION['role']=='admin' || $_SESSION['role']=='manager') {?>
+                                                            <td><?php echo $data['nama_operator'] ?></td>
                                                         <?php }?>
                                                         <td><?php echo $data['nama_barang'] ?></td>
                                                         <td><?php echo $data['jumlah_barang'] ?></td>
@@ -140,10 +193,22 @@ include './controller/conn.php';
                                                             echo '<span class="badge light badge-success">Disetujui</span>';
                                                         }elseif($_SESSION['role']=='staff gudang' && $data['status'] =='A-'){
                                                             echo '<span class="badge light badge-success">Disetujui</span>';
+                                                        }elseif($_SESSION['role']=='operator gudang' && $data['status'] =='A-'){
+                                                            echo '<a href="./controller/permintaan/operator/konfirmasi.php?id_permintaan='.$data['id_permintaan'] .'"><span class="badge light badge-warning">Konfirmasi</span></a>';
+                                                        }elseif($_SESSION['role']=='operator gudang' && $data['status'] =='A+'){
+                                                            echo '<span class="badge light badge-success">Terkonfirmasi</span>';
+                                                        }elseif($_SESSION['role']=='manager' && $data['status']== 'A-'){
+                                                            echo '<span class="badge light badge-warning">Menunggu Operator</span>';
+                                                        }elseif($_SESSION['role']=='manager' && $data['status']== 'A+'){
+                                                            echo '<span class="badge light badge-success">Terkonfirmasi</span>';
                                                         }
                                                         ?></td>
-                                                        <td><?php echo $data['created_at'] ?></td>
-                                                        <td>
+                                                        <td><?php
+                                                         $dataCreatedOld =  strtotime($data['created_at']);
+                                                         echo date('d F Y', $dataCreatedOld); 
+                                                         ?></td>
+                                                        <?php if ($_SESSION['role'] != 'operator gudang') {?>
+                                                            <td>
                                                         <?php if ($_SESSION['role']== 'teknisi' && $_SESSION['role']== 'manager' && $data['status']=='A') {?>
                                                             <a href="detailPermintaan.php?id=<?php echo $data['id_permintaan']?>" class="btn btn-sm btn-warning mb-2"><i class="la la-eye text-white"></i>
                                                         </a>
@@ -164,6 +229,7 @@ include './controller/conn.php';
                                                         </button>
                                                         <?php }?>
                                                         </td>
+                                                        <?php }?>
                                                     </tr>
                                                     <?php  }?>
                                                 </tbody>

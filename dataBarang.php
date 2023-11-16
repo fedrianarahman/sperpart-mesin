@@ -108,7 +108,7 @@ include './controller/conn.php';
 							<div class="card-header">
                                 <h4 class="card-title">Data Barang</h4>
                                 <!-- <a href="#" class="btn btn-success text-white">Import Excell</a> -->
-                                <?php if ($_SESSION['role']=='manager' || $_SESSION['role'] =='admin' || $_SESSION['role'] =='operator gudang') {
+                                <?php if ($_SESSION['role']=='manager' || $_SESSION['role'] =='admin' || $_SESSION['role'] =='staff gudang' || $_SESSION['role']) {
                                     echo '<a href="./addBarang.php" class="btn btn-primary">+ Add new</a>';
                                 }?>
 
@@ -152,11 +152,11 @@ include './controller/conn.php';
                                                         <td>
                                                             <a href="./detailBarang.php?kode_barang=<?php echo $data['kode_barang']?>" class="btn btn-sm mb-2 btn-warning"><i class="la la-eye text-white"></i>
                                                             </a>
-                                                            <?php if($_SESSION['role']=='operator gudang'){?>
+                                                            <?php if( $_SESSION['role'] =='staff gudang'){?>
                                                                
                                                                 <a href="./editBarang.php?kode_brg=<?php echo $data['kode_barang']?>" class="btn btn-sm mb-2 btn-primary" ><i class="la la-pencil"></i></a>
                                                             <?php }?>
-                                                            <?php if ($_SESSION['role']=='manager' || $_SESSION['role'] =='admin') {
+                                                            <?php if ($_SESSION['role']=='manager' || $_SESSION['role'] =='admin' ) {
                                                             
                                                             ?>
                                                             <a href="./editBarang.php?kode_brg=<?php echo $data['kode_barang']?>" class="btn btn-sm mb-2 btn-primary" ><i class="la la-pencil"></i></a>

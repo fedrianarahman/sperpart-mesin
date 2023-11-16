@@ -111,7 +111,7 @@ $kode_barang = $_GET['kode_barang'];
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="" class="display" style="min-width: 845px">
+                                    <table id="" class="display table table-bordered" style="min-width: 845px">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
