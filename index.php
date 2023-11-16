@@ -70,27 +70,31 @@ if (!isset($_SESSION['nama'])) {
         <div class="content-body">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-4">
-                        <a href="./dataUser.php">
-                            <div class="widget-stat card shadow-sm">
-                                <div class="card-body">
-                                    <div class="media">
-                                        <span class="mr-3">
-                                            <i class="fa fa-users" style=""></i>
-                                        </span>
-                                        <div class="media-body ">
-                                            <p class="mb-1">Total users</p>
-                                            <?php
-                                            $getDataUser = mysqli_query($conn, "SELECT * FROM user WHERE role != '26'");
-                                            $dataUser = mysqli_num_rows($getDataUser);
-                                            ?>
-                                            <h3 class=""><?= $dataUser; ?></h3>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                    <?php
+                    if ($_SESSION['role']=='manager' || $_SESSION['role']=='admin') {?>
+                  
+                  <div class="col-md-4">
+                      <a href="./dataUser.php">
+                          <div class="widget-stat card shadow-sm">
+                              <div class="card-body">
+                                  <div class="media">
+                                      <span class="mr-3">
+                                          <i class="fa fa-users" style=""></i>
+                                      </span>
+                                      <div class="media-body ">
+                                          <p class="mb-1">Total users</p>
+                                          <?php
+                                          $getDataUser = mysqli_query($conn, "SELECT * FROM user WHERE role != '26'");
+                                          $dataUser = mysqli_num_rows($getDataUser);
+                                          ?>
+                                          <h3 class=""><?= $dataUser; ?></h3>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </a>
+                  </div>
+                    <?php }?>
                     <div class="col-md-4">
                         <a href="./dataBarang.php">
                             <div class="widget-stat card shadow-sm">
@@ -134,7 +138,8 @@ if (!isset($_SESSION['nama'])) {
                         </a>
                     </div>
                 </div>
-                <div class="row">
+                <?php if ($_SESSION['role']=='manager' || $_SESSION['role']== 'staff gudang' || $_SESSION['role']=='admin') {?>
+                    <div class="row">
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-header"></div>
@@ -152,6 +157,7 @@ if (!isset($_SESSION['nama'])) {
                     </div>
                     </div>
                 </div>
+                <?php }?>
             </div>
         </div>
         <!--**********************************
