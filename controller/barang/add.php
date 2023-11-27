@@ -21,6 +21,10 @@ $kd_brg = $huruf . sprintf("%03d", $urutan) . $akhirKode;
 // kode barang berdasarkan kode yang digenerate di atas
 $kode_barang = $kd_brg;
 
+
+// from post
+$kode_barangPost = $_POST['kode_barang'];
+
 // menangkap data yang dikirimkan dari form input
 $nama_barang = strtolower($_POST['nama_barang']);
 $merk_barang = strtolower($_POST['merk_barang']);
@@ -46,7 +50,7 @@ if (!empty($_FILES['photo']['name'])) {
 
 
 // $query = mysqli_query($conn, "INSERT INTO `tb_barang`(`kode_barang`, `nama_barang`, `merek`, `rak`, `satuan`, `awal`, `masuk`, `keluar`, `akhir`, `created_at`, `updated_at`) VALUES ('$kode_barang','$nama_barang','$merk_barang','$nama_rak','$satuan_barang','$awal','$masuk','$keluar','$akhir','$tgl_input','')");
-$query = mysqli_query($conn, "INSERT INTO `tb_barang`(`kode_barang`, `nama_barang`,`photo`, `merek`, `rak`, `satuan`, `jumlah_awal`, `jumlah_masuk`, `jumlah_keluar`, `jumlah_total`, `jumlah_akhir`, `stock`,`created_at`, `updated_at`) VALUES ('$kode_barang','$nama_barang','$photo','$merk_barang','$nama_rak','$satuan_barang','$awal','$masuk','$keluar','$akhir','','$stock','$tgl_input','')");
+$query = mysqli_query($conn, "INSERT INTO `tb_barang`(`kode_barang`, `nama_barang`,`photo`, `merek`, `rak`, `satuan`, `jumlah_awal`, `jumlah_masuk`, `jumlah_keluar`, `jumlah_total`, `jumlah_akhir`, `stock`,`created_at`, `updated_at`) VALUES ('$kode_barangPost','$nama_barang','$photo','$merk_barang','$nama_rak','$satuan_barang','$awal','$masuk','$keluar','$akhir','','$stock','$tgl_input','')");
 
 if ($query) {
     $_SESSION['status-info'] = "Data Berhasil Ditambahkan";

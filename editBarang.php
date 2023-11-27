@@ -153,7 +153,7 @@ $kode = $_GET['kode_brg'];
                                        <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="">Kode Barang</label>
-                                            <input type="text" class="form-control input-default " placeholder="" name="kd_brg" value="<?php echo $data['kode_barang']?>" readonly>
+                                            <input type="text" class="form-control input-default " placeholder="" name="kd_brg" value="<?php echo $data['kode_barang']?>" >
                                             
                                         </div>
                                        </div>

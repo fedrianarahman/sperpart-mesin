@@ -148,14 +148,14 @@ if (!isset($_SESSION['nama'])) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                     <div class="card">
                         <div class="card-header"></div>
                         <div class="card-body">
                             <div id="chart-pie"></div>
                         </div>
                     </div>
-                    </div>
+                    </div> -->
                 </div>
                 <?php }?>
             </div>
