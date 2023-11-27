@@ -189,7 +189,7 @@ include './controller/conn.php';
                                                             echo '<span class="badge light badge-warning">Menunggu</span>';
                                                         } elseif($data['status']== 'C'){
                                                             echo '<span class="badge light badge-danger">Dibatalkan</span>';
-                                                        }elseif($_SESSION['role']=='teknisi' && $data['status'] == 'A-'){
+                                                        }elseif($_SESSION['role']=='teknisi' && $data['status'] == 'A-' || $data['status']=='A+'){
                                                             echo '<span class="badge light badge-success">Disetujui</span>';
                                                         }elseif($_SESSION['role']=='staff gudang' && $data['status'] =='A-'){
                                                             echo '<span class="badge light badge-success">Disetujui</span>';
@@ -214,7 +214,7 @@ include './controller/conn.php';
                                                         </a>
                                                         <?php }?>
                                                         <?php
-                                                        if ($_SESSION['role'] == 'teknisi' && $data['status']=='A-') {?>
+                                                        if ($_SESSION['role'] == 'teknisi' && $data['status']=='A-' || $data['status']=='A+') {?>
                                                         <a href="detailPermintaan.php?id=<?php echo $data['id_permintaan']?>" class="btn btn-sm btn-warning mb-2"><i class="la la-eye text-white"></i>
                                                         </a>
                                                         <?php }?>
@@ -223,7 +223,7 @@ include './controller/conn.php';
                                                         </a>
                                                         <?php }?>
                                                         <?php if ($_SESSION['role'] =='teknisi' || $_SESSION['role'] == 'manager') {?>
-                                                            <button <?php if ($data['status'] =='C' || $data['status'] =='A-') {
+                                                            <button <?php if ($data['status'] =='C' || $data['status'] =='A-' || $data['status']== 'A+') {
                                                             echo 'disabled';
                                                         } ?> class="btn btn-sm btn-danger mb-2" id="hapusData" value="<?php echo $data['id_permintaan']?>" data-id="<?php echo $data['id_permintaan']?>"><i class="fa fa-times text-white" aria-hidden="true"></i>
                                                         </button>

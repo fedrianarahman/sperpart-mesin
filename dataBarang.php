@@ -108,7 +108,7 @@ include './controller/conn.php';
 							<div class="card-header">
                                 <h4 class="card-title">Data Barang</h4>
                                 <!-- <a href="#" class="btn btn-success text-white">Import Excell</a> -->
-                                <?php if ($_SESSION['role']=='manager' || $_SESSION['role'] =='admin' || $_SESSION['role'] =='staff gudang' || $_SESSION['role']) {
+                                <?php if ($_SESSION['role']=='manager' || $_SESSION['role'] =='admin' || $_SESSION['role'] =='staff gudang' ) {
                                     echo '<a href="./addBarang.php" class="btn btn-primary">+ Add new</a>';
                                 }?>
 

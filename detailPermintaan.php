@@ -73,9 +73,19 @@ $id = $_GET['id'];
             <!-- row -->
             <div class="container-fluid">
             <?php
-            $getDataPermintaan = mysqli_query($conn, "SELECT tb_permintaan.nama_barang AS nama_barang, tb_permintaan.id AS id_permintaan, tb_permintaan.jumlah_barang AS jumlah_barang, user.nama AS nama, tb_barang.photo AS photo
+            $getDataPermintaan = mysqli_query($conn, "SELECT
+             tb_permintaan.nama_barang AS nama_barang,
+             tb_permintaan.status AS status,
+             tb_permintaan.id AS id_permintaan,
+             tb_permintaan.jumlah_barang AS jumlah_barang,
+             tb_barang.photo AS photo,
+             u1.nama AS nama_teknisi,
+             u2.nama AS nama_staff ,
+             u3.nama AS nama_operator
             FROM tb_permintaan
-            INNER JOIN user ON user.id = tb_permintaan.id_user
+            INNER JOIN user u1 ON u1.id = tb_permintaan.id_user
+            LEFT JOIN user u2 ON u2.id = tb_permintaan.accepter
+            LEFT JOIN user u3 ON u3.id = tb_permintaan.operator
             INNER JOIN tb_barang ON tb_barang.nama_barang = tb_permintaan.nama_barang
             WHERE tb_permintaan.id = '$id'
             ");
@@ -112,7 +122,7 @@ $id = $_GET['id'];
                                        <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="">Nama Teknisi </label>
-                                            <input type="text" class="form-control input-default " placeholder="" name="nama_teknisi" value="<?= $data['nama'] ?>" readonly>
+                                            <input type="text" class="form-control input-default " placeholder="" name="nama_teknisi" value="<?= $data['nama_teknisi'] ?>" readonly>
                                             <input hidden type="text" class="form-control input-default " placeholder="" name="id_permintaan" value="<?= $data['id_permintaan'] ?>" readonly>
                                         </div>
                                        </div>
@@ -129,13 +139,25 @@ $id = $_GET['id'];
                                             <input type="number" class="form-control input-default " placeholder="" name="jumlah_barang" value="<?= $data['jumlah_barang'] ?>" readonly>
                                         </div>
                                        </div>
-                                       <div class="col-md-12">
-                                        
-                                        </div>
+                                       <?php if ($data['status']=='A-') {?>
+                                        <div class="col-md-6">
+                                        <p class="text-center">Disetujui oleh :<br/> <span class="font-weight-bold"><?php echo $data['nama_staff'] ?></span> <br/> (Staff Gudang)</p>
+                                       </div>
+                                        <?php }?>
+                                        <?php if ($data['status'] == 'A+'){?>
+                                         <div class="col-md-6">
+                                        <p class="text-center">Disetujui oleh :<br/> <span class="font-weight-bold"><?php echo $data['nama_staff'] ?></span> <br/> (Staff Gudang)</p>
+                                       </div>   
+                                        <div class="col-md-6">
+                                        <p class="text-center">Disetujui oleh :<br/> <span class="font-weight-bold"><?php echo $data['nama_operator'] ?></span> <br/> (Operator Gudang)</p>
+                                       </div>
+                                        <?php }?>
+                                       
                                        </div>
                                         <a href="./dataPermintaan.php" class="btn btn-warning text-white">Kembali</a>
+                                        <?php if ($data['status']=='P') {?>
                                         <button class="btn float-right btn-success text-white">Konfirmasi</button>
-                                        
+                                        <?php }?>
                                     </form>
                                 </div>
                             </div>
