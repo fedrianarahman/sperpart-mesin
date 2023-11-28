@@ -218,7 +218,7 @@ include './controller/conn.php';
                                                         <a href="detailPermintaan.php?id=<?php echo $data['id_permintaan']?>" class="btn btn-sm btn-warning mb-2"><i class="la la-eye text-white"></i>
                                                         </a>
                                                         <?php }?>
-                                                        <?php if ($_SESSION['role']== 'staff gudang' || $_SESSION['role']== 'manager') {?>
+                                                        <?php if ($_SESSION['role']== 'staff gudang' ) {?>
                                                             <a href="detailPermintaan.php?id=<?php echo $data['id_permintaan']?>" class="btn btn-sm btn-warning mb-2"><i class="la la-eye text-white"></i>
                                                         </a>
                                                         <?php }?>
