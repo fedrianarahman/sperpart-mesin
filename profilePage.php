@@ -94,6 +94,26 @@ if (!isset($_SESSION['nama'])) {
             margin-top: -10px;
             color: #999999;
         }
+        .ttd-container{
+            max-height: 100px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .ttd-container img{
+            width: 100px;
+            display: block;
+            margin: auto;
+        }
+        .ttd-container input[type="file"]{
+            cursor: pointer;
+            display: block;
+            height: 100%;
+            left: 0;
+            opacity: 0 !important;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
     </style>
 </head>
 
@@ -258,6 +278,27 @@ if (!isset($_SESSION['nama'])) {
                                                 <input type="password" class="form-control" value="<?php echo $dataUser['password'] ?>" name="password">
                                             </div>
                                         </div>
+                                        <?php
+                                        if ($_SESSION['role']=='manager'|| $_SESSION['role']=='staff gudang' || $_SESSION['role']=='operator gudang') {?>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="" class="text-align-center"><strong>Tanda Tangan</strong></label>
+                                                <?php
+                                                if ($dataUser['tanda_tangan'] != null) {?>
+                                                    <div class="ttd-container shadow-sm p-4">
+                                                        <img src="./images/ttd/<?php echo $dataUser['tanda_tangan'] ?>" id="tandaTanganImage" alt="">
+                                                        
+                                                    </div>
+                                                <?php } else{?>
+                                                    <div class="ttd-container shadow-sm p-4">
+                                                        <img src="" id="tandaTanganImage" alt="">
+                                                        <input type="file" name="tanda_tangan" id="" onchange="handleTandaTangan(this);">
+                                                        <p id="tandaTanganUpload">Belum Ada Tanda Tangan! <span class="text-primary">Upload</span></p>
+                                                    </div>
+                                                <?php }?>
+                                            </div>
+                                        </div>
+                                        <?php }?>
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label><strong>Alamat</strong></label>
@@ -315,6 +356,7 @@ if (!isset($_SESSION['nama'])) {
     <script src="js/dlabnav-init.js"></script>
     <script src="js/jquery-3.5.1.min.js"></script>
     <script>
+
     function readURL(input) {
       if (input.files && input.files[0]) {
         var reader = new FileReader();
@@ -327,6 +369,22 @@ if (!isset($_SESSION['nama'])) {
         reader.readAsDataURL(input.files[0]);
       }
     }
+
+    const tandaTanganUpload = document.getElementById('tandaTanganUpload');
+    
+    function handleTandaTangan(input) { 
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = (e)=>{
+                $('#tandaTanganImage').attr('src', e.target.result);
+                tandaTanganUpload.style.display="none";
+            }
+
+            reader.readAsDataURL(input.files[0])
+        }
+     }
+
   </script>
     <!-- Demo scripts -->
     <script src="js/dashboard/dashboard-3.js"></script>

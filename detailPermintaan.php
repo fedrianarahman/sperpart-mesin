@@ -61,6 +61,7 @@ $id = $_GET['id'];
         ***********************************-->
         <?php
         include './include/sidebar.php'
+        
         ?>
         <!--**********************************
             Sidebar end
@@ -155,6 +156,10 @@ $id = $_GET['id'];
                                        
                                        </div>
                                         <a href="./dataPermintaan.php" class="btn btn-warning text-white">Kembali</a>
+                                        <?php
+                                        if ($data['status']=='A+') {?>
+                                        <a href="./printPermintaan.php?id=<?php echo $data['id_permintaan'] ?>" target="_blank" class="btn btn-primary float-right text-white"><i class="fa fa-print" ></i> Cetak</a>
+                                        <?php }?>
                                         <?php if ($data['status']=='P') {?>
                                         <button class="btn float-right btn-success text-white">Konfirmasi</button>
                                         <?php }?>
@@ -219,6 +224,6 @@ $id = $_GET['id'];
 	
 		<!-- Demo scripts -->
     <script src="js/dashboard/dashboard-3.js"></script>
-	
+    
 </body>
 </html>

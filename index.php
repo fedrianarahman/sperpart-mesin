@@ -148,6 +148,50 @@ if (!isset($_SESSION['nama'])) {
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Riwayat Penambahan Barang Masuk</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-responsive-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Kode Barang</th>
+                                                <th>Nama Barang</th>
+                                                <th>Jumlah </th>
+                                                <th>Tanggal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $getDataPenambahanBarangMasuk = mysqli_query($conn, "SELECT
+                                             riwayat_barang_masuk.kd_barang AS kode_barang,
+                                             riwayat_barang_masuk.jumlah_masuk AS jumlah_barang,
+                                             riwayat_barang_masuk.created_at AS tanggal_masuk,
+                                             tb_barang.nama_barang AS nama_barang
+                                             FROM riwayat_barang_masuk INNER JOIN tb_barang ON tb_barang.kode_barang = riwayat_barang_masuk.kd_barang ORDER BY riwayat_barang_masuk.id ASC LIMIT 5
+                                             ");
+                                            $i =1;
+                                            while ($data = mysqli_fetch_array($getDataPenambahanBarangMasuk)) {?>
+                                            <tr>
+                                                <td><?php echo $i ?></td>
+                                                <td><?php echo $data['kode_barang'] ?></td>
+                                                <td><?php echo $data['nama_barang'] ?></td>
+                                                <td><?php echo $data['jumlah_barang'] ?></td>
+                                                <td><?php echo $data['tanggal_masuk'] ?></td>
+                                            </tr>
+                                            <?php
+                                            $i++;
+                                             }?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- <div class="col-md-6">
                     <div class="card">
                         <div class="card-header"></div>

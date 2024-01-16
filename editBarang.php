@@ -191,7 +191,7 @@ $kode = $_GET['kode_brg'];
                                             <input type="text" class="form-control input-default " placeholder="" name="satuan_barang" value="<?php echo $data['satuan']?>">
                                         </div>
                                        </div>
-                                      <?php
+                                      <!-- <?php
                                       if ($_SESSION['role'] != 'manager'){?>
                                          <div class="col-md-6">
                                        <div class="form-group">
@@ -199,14 +199,14 @@ $kode = $_GET['kode_brg'];
                                             <input type="number" class="form-control input-default " placeholder="" name="awal" value="<?php echo $data['jumlah_awal']?>">
                                         </div>
                                        </div>
-                                      <?php }?>
+                                      <?php }?> -->
                                        <div class="col-md-6">
                                        <div class="form-group">
-                                            <label for="">masuk</label>
-                                            <input type="number" class="form-control input-default " placeholder="" name="masuk" value="<?php echo $data['jumlah_masuk']?>">
+                                            <label for="">Stock Barang</label>
+                                            <input type="number" class="form-control input-default " placeholder="" name="stock_barang" value="<?php echo $data['jumlah_masuk']?>">
                                         </div>
                                        </div>
-                                       <?php
+                                       <!-- <?php
                                        if ($_SESSION['role'] != 'manager') {?>
                                        <div class="col-md-6">
                                        <div class="form-group">
@@ -214,13 +214,13 @@ $kode = $_GET['kode_brg'];
                                             <input type="number" class="form-control input-default " placeholder="" name="keluar" value="<?php echo $data['jumlah_keluar']?>">
                                         </div>
                                        </div>
-                                       <?php }?>
-                                       <div class="col-md-6">
+                                       <?php }?> -->
+                                       <!-- <div class="col-md-6">
                                        <div class="form-group">
                                             <label for="">akhir</label>
                                             <input type="number" class="form-control input-default " placeholder="" name="akhir" value="<?php echo $data['jumlah_akhir']?>">
                                         </div>
-                                       </div>
+                                       </div> -->
                                        <div class="col-md-6">
                                        <div class="form-group">
                                             <label>Stock</label>

@@ -39,6 +39,80 @@ include './controller/conn.php';
                                 while ($dataUser = mysqli_fetch_array($getDataUser)) {
                                     
                             ?>
+                            <?php if ($_SESSION['role']=='staff gudang') {?>
+                             <li class="nav-item dropdown notification_dropdown">
+                                <a class="nav-link bell ai-icon" href="#" role="button" data-toggle="dropdown">
+                                    <svg id="icon-user" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell">
+										<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+										<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+									</svg>
+                                    <?php 
+                                   $query = mysqli_query($conn, "SELECT * FROM tb_barang WHERE jumlah_masuk < 20");
+                                    $data = mysqli_num_rows($query);
+                                    if ($data) {?>
+                                    <div class="pulse-css"></div>
+                                    <?php }?>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <ul class="list-unstyled">
+                                        <?php
+                                        if ($data) {?>
+                                        <li class="media dropdown-item">
+                                            <span class="success"><i class="fa fa-superpowers"></i></span>
+                                            <div class="media-body">
+                                                <a href="premintaanPembelianBarang.php">
+                                                    <p><strong><?php echo $data; ?> Barang</strong> Stock Menipis
+                                                    </p>
+                                                </a>   
+                                            </div>
+                                            
+                                        </li>
+                                        <?php } else{?>
+                                            <li>
+                                            <p class="text-center text-danger">Tidak Ada Data</p>
+                                            </li>
+                                        <?php }?>    
+                                    </ul>
+                                </div>
+                            </li>
+                            <?php }?>
+                            <?php if ($_SESSION['role']=='manager') {?>
+                             <li class="nav-item dropdown notification_dropdown">
+                                <a class="nav-link bell ai-icon" href="#" role="button" data-toggle="dropdown">
+                                    <svg id="icon-user" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell">
+										<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+										<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+									</svg>
+                                    <?php 
+                                   $query = mysqli_query($conn, "SELECT * FROM pembelian_barang WHERE status ='P'");
+                                    $data = mysqli_num_rows($query);
+                                    if ($data) {?>
+                                    <div class="pulse-css"></div>
+                                    <?php }?>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <ul class="list-unstyled">
+                                        <?php
+                                        if ($data) {?>
+                                        <li class="media dropdown-item">
+                                            <span class="success"><i class="fa fa-superpowers"></i></span>
+                                            <div class="media-body">
+                                                <a href="dataPembelianBarang.php">
+                                                    <p><strong><?php echo $data; ?>Permintaan Pembelian Barang</strong> 
+                                                    </p>
+                                                </a>   
+                                            </div>
+                                            
+                                        </li>
+                                        <?php } else{?>
+                                            <li>
+                                            <p class="text-center text-danger">Tidak Ada Data</p>
+                                            </li>
+                                        <?php }?>    
+                                    </ul>
+                                </div>
+                            </li>
+                            <?php }?>
                             <li class="nav-item dropdown notification_dropdown">
                                 <a class="nav-link bell ai-icon" href="#" role="button" data-toggle="dropdown">
                                     <?php echo ucwords($dataUser['nama']) ?>
