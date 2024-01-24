@@ -107,6 +107,48 @@ include './controller/conn.php';
                         <div class="card">
                             <div class="card-header">
                                 <h4 class="card-title">Data Barang</h4>
+                                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#basicModal">+ Ajukan Semua</button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="basicModal">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Data Barang</h5>
+                                                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table class="table table-sm">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>NO</th>
+                                                            <th>Kode Barang</th>
+                                                            <th>Nama Barang</th>
+                                                            <th>Stock</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php
+                                                        $query1 = mysqli_query($conn, "SELECT * FROM tb_barang WHERE jumlah_masuk < 20 AND status_pembelian = 'N'");
+                                                        $no = 1;
+                                                        while ($data1 = mysqli_fetch_array($query1)) { ?>
+                                                            <tr>
+                                                                <td><?php echo $no++; ?></td>
+                                                                <td><?php echo $data1['kode_barang']; ?></td>
+                                                                <td><?php echo $data1['nama_barang']; ?></td>
+                                                                <td><?php echo $data1['jumlah_masuk']; ?></td>
+                                                            </tr>
+                                                        <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-sm btn-primary" id="ajukanPembelian">Ajukan</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -136,16 +178,16 @@ include './controller/conn.php';
                                                     <td><?php echo $data['merek'] ?></td>
                                                     <td><?php echo $data['nama_rak'] ?></td>
                                                     <td><?php echo $data['jumlah_masuk'] ?></td>
-                                                    <td><?php if ($data['status_pembelian']=='N') {
-                                                        echo '<span class ="badge badge-danger light">Stock Menipis</span>';
-                                                    } elseif($data['status_pembelian']=='P'){
-                                                        echo '<span class="badge badge-warning light">Proses</span>';
-                                                    }?></td>
+                                                    <td><?php if ($data['status_pembelian'] == 'N') {
+                                                            echo '<span class ="badge badge-danger light">Stock Menipis</span>';
+                                                        } elseif ($data['status_pembelian'] == 'P') {
+                                                            echo '<span class="badge badge-warning light">Proses</span>';
+                                                        } ?></td>
                                                     <td>
-                                                        
-                                                        <button <?php if ($data['status_pembelian']=='P') {
-                                                            echo 'disabled';
-                                                        } ?> id="requestPembelian" value="<?php echo $data['kode_barang'] ?>" class="btn btn-sm mb-2 btn-primary"><i class="la la-pencil"></i></button>
+
+                                                        <button <?php if ($data['status_pembelian'] == 'P') {
+                                                                    echo 'disabled';
+                                                                } ?> id="requestPembelian" value="<?php echo $data['kode_barang'] ?>" class="btn btn-sm mb-2 btn-primary"><i class="la la-pencil"></i></button>
                                                     </td>
                                                 </tr>
                                             <?php
@@ -216,30 +258,60 @@ include './controller/conn.php';
                             type: "POST",
                             url: "./controller/barang/pembelianBarang.php",
                             data: {
-                                requestPembelian : true,
-                                kodeBarang  : kodeBarang
+                                requestPembelian: true,
+                                kodeBarang: kodeBarang
                             },
-                            success: function (response) {
-                              Swal.fire({
-                                text : response,
-                                icon : 'success'
-                              }).then((result)=>{
-                                if (result.isConfirmed) {
-                                    location.reload();
-                                }
-                              });
-                            },
-                            error : function(response){
+                            success: function(response) {
                                 Swal.fire({
-                                text : response,
-                                icon : 'danger'
-                              });
+                                    text: response,
+                                    icon: 'success'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        location.reload();
+                                    }
+                                });
+                            },
+                            error: function(response) {
+                                Swal.fire({
+                                    text: response,
+                                    icon: 'danger'
+                                });
                             }
                         });
                     }
                 })
             });
 
+            $(document).on('click', '#ajukanPembelian', function() {
+                $('#basicModal .close').click();
+                $.ajax({
+                    type: "POST",
+                    url: "./controller/barang/requestPembelianBarangAll.php",
+                    data: {
+                        requestPembelianAll: true
+                    },
+                    // dataType: 'json'
+                    success: function(response) {
+                        console.log("Data yang akan disimpan:", response);
+
+                        // Lanjutkan ke AJAX kedua di sini
+                        Swal.fire({
+                            text: 'Permintaan Pembelian Barang Berhasil !',
+                            icon: 'success'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        });
+                    },
+                    error: function(response) {
+                        Swal.fire({
+                            text: response,
+                            icon: 'danger'
+                        });
+                    }
+                });
+            });
         });
     </script>
 

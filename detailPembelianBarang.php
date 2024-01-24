@@ -8,8 +8,9 @@ include './controller/conn.php';
 function formatTanggal($param)
 {
     $newFormat = strtotime($param);
-    return date('d F Y | H:i', $newFormat);
+    return date('d F Y', $newFormat);
 }
+$id = $_GET['id'];
 ?>
 
 <!DOCTYPE html>
@@ -114,7 +115,7 @@ function formatTanggal($param)
                         ?>
                     </div>
                 </div>
-                    <?php
+                    <!-- <?php
                     $idPembelian  = $_GET['id'];
                     $query = mysqli_query($conn, "SELECT 
                     pembelian_barang.nama_barang AS nama_barang,
@@ -211,12 +212,120 @@ function formatTanggal($param)
                                 if($_SESSION['role']=='manager'){?>
                                     <a href="./controller/barang/konfirmasiPembelianBarang.php?id_pembelian=<?php echo $data['id_pembelian'] ?>" class="btn float-right btn-success text-white">Konfirmasi</a>
                                 <?php }?>
-                                <a href="" target="_blank" class="btn btn-primary float-right text-white mr-2"><i class="fa fa-print" ></i> Cetak</a>
+                                <a href="./printSuratPembelianBarang.php?idPembelian=<?php echo $data['id_pembelian']  ?>" target="_blank" class="btn btn-primary float-right text-white mr-2"><i class="fa fa-print" ></i> Cetak</a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <?php }?>
+                <?php }?> -->
+                <div class="row">
+                   
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                            <h5 class="text-center mb-4 font-weight-bold">Detail Permintaan Pembelian Barang</h5>
+                            <div class="row mb-4">
+                                <div class="col-lg-12">
+                                <?php
+                                
+                                $query = mysqli_query($conn, "SELECT 
+                                pembelian_barang.nama_barang AS nama_barang,
+                                pembelian_barang.kode_barang AS kode_barang,
+                                pembelian_barang.status AS status,
+                                pembelian_barang.created_at AS tanggal_permintaan,
+                                pembelian_barang.updated_at AS tanggal_penyetujuan,
+                                pembelian_barang.id AS id_pembelian,
+                                tb_barang.jumlah_masuk AS stock,
+                                tb_barang.photo AS photo,
+                                u1.nama AS nama_staff,
+                                u2.nama AS nama_manager
+                                FROM pembelian_barang INNER JOIN tb_barang ON tb_barang.kode_barang  = pembelian_barang.kode_barang LEFT JOIN user u1 ON u1.id = pembelian_barang.requester LEFT JOIN user u2 ON u2.id = pembelian_barang.accepter WHERE pembelian_barang.created_at = '$id' LIMIT 1");
+                                while ($data = mysqli_fetch_array($query)) {?>
+                                    <table>
+                                        <tr>
+                                            <td class="px-2">Tanggal Permintaan</td>
+                                            <td class="px-2">:</td>
+                                            <td><?php echo formatTanggal($data['tanggal_permintaan']); ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-2">Pemohon</td>
+                                            <td class="px-2">:</td>
+                                            <td><?php echo $data['nama_staff'] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-2">Status</td>
+                                            <td class="px-2">:</td>
+                                            <td><?php if ($data['status']=='P') {
+                                                echo '<span class="badge badge-warning light">Menunggu Penyetujuan</span>';
+                                            }else{
+                                                echo '<span class="badge badge-success light">Disetujui</span>';
+                                            }?></td>
+                                        </tr>
+                                        <?php if ($data['status']=='A') {?>
+                                        <tr>
+                                            <td class="px-2">Penyetuju</td>
+                                            <td class="px-2">:</td>
+                                            <td><?php echo $data['nama_manager'] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-2">Tanggal Penyetujuan</td>
+                                            <td class="px-2">:</td>
+                                            <td><?php echo formatTanggal($data['tanggal_penyetujuan']) ?></td>
+                                        </tr>
+                                        <?php }?>
+                                    </table>
+                                    <?php }?>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 px-4">
+                                    <p class="mb-2">Detail Barang :</p>
+                                    <table class="table table-sm table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>NO</th>
+                                                <th>Kode Barang</th>
+                                                <th>Nama Barang</th>
+                                                <th>Stock Yang Tersedia</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $getDataBarang = mysqli_query($conn, "SELECT 
+                                            pembelian_barang.nama_barang AS nama_barang,
+                                            pembelian_barang.kode_barang AS kode_barang,
+                                            pembelian_barang.status AS status,
+                                            pembelian_barang.created_at AS tanggal_permintaan,
+                                            pembelian_barang.updated_at AS tanggal_penyetujuan,
+                                            pembelian_barang.id AS id_pembelian,
+                                            tb_barang.jumlah_masuk AS stock,
+                                            tb_barang.photo AS photo,
+                                            u1.nama AS nama_staff,
+                                            u2.nama AS nama_manager
+                                            FROM pembelian_barang INNER JOIN tb_barang ON tb_barang.kode_barang  = pembelian_barang.kode_barang LEFT JOIN user u1 ON u1.id = pembelian_barang.requester LEFT JOIN user u2 ON u2.id = pembelian_barang.accepter WHERE pembelian_barang.created_at = '$id'");
+                                            $no = 1;
+                                            while ($dataBarang = mysqli_fetch_array($getDataBarang)) {?>
+                                            <tr>
+                                                <td><?php echo $no++; ?></td>
+                                                <td><?php echo $dataBarang['kode_barang'] ?></td>
+                                                <td><?php echo $dataBarang['nama_barang'] ?></td>
+                                                <td><?php echo $dataBarang['stock'] ?></td>
+                                            </tr>
+                                            <?php }?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <a href="./dataPembelianBarang.php" class="btn btn-sm btn-warning text-white">Kembali</a>
+                                <?php
+                                if($_SESSION['role']=='manager'){?>
+                                    <a href="./controller/barang/konfirmasiPembelianBarang.php?id_pembelian=<?php echo $id ?>" class="btn float-right btn-success text-white">Konfirmasi</a>
+                                <?php }?>
+                                <a href="./printSuratPembelianBarang.php?idPembelian=<?php echo $id?>" target="_blank" class="btn btn-primary float-right text-white mr-2"><i class="fa fa-print" ></i> Cetak</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <!--**********************************

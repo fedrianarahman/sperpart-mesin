@@ -5,11 +5,34 @@ if (!isset($_SESSION['nama'])) {
     exit();
 }
 include './controller/conn.php';
-function formatTanggal($param)
+
+
+ function formatTanggal($param)
 {
     $newFormat = strtotime($param);
-    return date('d F Y | H:i:s', $newFormat);
+    return date('d F Y', $newFormat);
 }
+
+
+$hariIni = date(' F Y');
+$tglAwal = "";
+$tglAkhir = "";
+
+if (isset($_POST['cari'])) {
+    $tglAwal = $_POST['tgl_awal'];
+    $tglAkhir = $_POST['tgl_akhir'];
+
+    if ($tglAwal != null || $tglAkhir != null) {
+        $hariIni = formatTanggal($tglAwal) ." ". "" ."Sampai". "" ." ". formatTanggal($tglAkhir);
+    } else {
+        $hariIni = date(' F Y');    
+    }
+    
+} else {
+    $hariIni = date(' F Y');
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -81,8 +104,8 @@ function formatTanggal($param)
                     <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                            <li class="breadcrumb-item active"><a href="javascript:void(0);">User</a></li>
-                            <li class="breadcrumb-item active"><a href="javascript:void(0);">Pembelian Barang</a></li>
+                            <li class="breadcrumb-item active"><a href="javascript:void(0);">Archive</a></li>
+                            <li class="breadcrumb-item active"><a href="javascript:void(0);">Riwayat Permintaan Pembelian  Barang </a></li>
                         </ol>
                     </div>
                 </div>
@@ -111,58 +134,50 @@ function formatTanggal($param)
                         ?>
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Data Pembelian Barang</h4>
+                                <h4 class="card-title">Data RiwayatPermintaan Pembelian Barang Tanggal : <span class="text-primary"><?php echo $hariIni ?></span></h4>
                             </div>
                             <div class="card-body">
+                                <div class="row mb-2">
+                                    <div class="col-md-12">
+                                        <form action="" method="POST">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="">Rentan Tanggal Dari</label>
+                                                        <input type="date" class="form-control input-default " placeholder="" name="tgl_awal" value="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="">Rentan Tanggal Hingga</label>
+                                                        <input type="date" class="form-control input-default " placeholder="" name="tgl_akhir" value="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 pt-4">
+                                                    <div class="form-group">
+                                                        <button class="btn btn-warning mt-2" type="submit" name="cari">Cari</button>
+                                                        <a href="./printRiwayatBarangMasuk.php?tgl_awal=<?php echo $tglAwal ?>&tgl_akhir=<?php echo $tglAkhir?>" class="btn btn-primary mt-2 text-white" target="_blank">Cetak</a>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                                 <div class="table-responsive">
                                     <table id="example3" class="display" style="min-width: 845px">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
+                                                <th>Nama staff</th>
                                                 <th>Kode Barang</th>
                                                 <th>Nama Barang</th>
-                                                <th>Staff </th>
                                                 <th>Status</th>
-                                                <th>Total</th>
-                                                <th>Tanggal Permintaan</th>
+                                                <th>Tanggal</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <?php
-                                            $query = mysqli_query($conn, "SELECT
-                                            pembelian_barang.kode_barang AS kode_barang,
-                                            pembelian_barang.nama_barang AS nama_barang,
-                                            pembelian_barang.status AS status, 
-                                            pembelian_barang.created_at AS tanggal_permintaan,
-                                            pembelian_barang.id AS id_pembelian, 
-                                            user.nama AS nama,
-                                            COUNT(*) AS total_data
-                                        FROM pembelian_barang
-                                        INNER JOIN user ON user.id = pembelian_barang.requester
-                                        GROUP BY pembelian_barang.created_at
-                                        ORDER BY pembelian_barang.created_at ASC");
-                                            $no = 1;
-                                            $total = mysqli_num_rows($query);
-                                            while ($data = mysqli_fetch_array($query)) {?>
-                                            <tr>
-                                                <td><?php echo $no++; ?></td>
-                                                <td><?php echo $data['kode_barang'] ?></td>
-                                                <td><?php echo $data['nama_barang'] ?></td>
-                                                <td><?php echo $data['nama'] ?></td>
-                                                <td><?php if ($data['status']=='P') {
-                                                    echo '<span class="badge badge-warning light">Prosess</span>';
-                                                }elseif($data['status']=='A'){
-                                                    echo '<span class="badge badge-success light">Disetujui</span>';
-                                                }  ?></td>
-                                                <td><?php echo $data['total_data'] ?></td>
-                                                <td><?php echo formatTanggal($data['tanggal_permintaan']) ?></td>
-                                                <td>
-                                                    <a href="./detailPembelianBarang.php?id=<?php echo $data['tanggal_permintaan']?>" class="btn btn-sm btn-warning"><i class="la la-eye text-white"></i></a>
-                                                </td>
-                                            </tr>
-                                            <?php }?>
-                                        </tbody>
+                                        
                                     </table>
                                 </div>
                             </div>
@@ -210,7 +225,38 @@ function formatTanggal($param)
     <script src="js/plugins-init/datatables.init.js"></script>
     <script src="./js/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+    <script>
+        $(document).on('click', '#updateStockBarang', function(event) {
+            event.preventDefault();
+            const thisClicked = $(this);
+
+            const getDataKodeBarang = thisClicked.closest('.modal-content').find('#kode_barang').val();
+            const getDataJumlahMasuk = thisClicked.closest('.modal-content').find('#jumlah_masuk').val();
+
+            $.ajax({
+                type: "POST",
+                url: "./controller/barang/updateStockBarang.php",
+                data: {
+                    kodeBarang: getDataKodeBarang,
+                    jumlahMasuk: getDataJumlahMasuk,
+                    updateStock: true
+                },
+                success: function(response) {
+                    $('.modal').find('.close').click();
+                    Swal.fire({
+                        title: '',
+                        text: response,
+                        icon: 'success'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
+                    })
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>

@@ -58,7 +58,7 @@
                     <ul aria-expanded="false">
                         <li><a href="riwayatPermintaan.php">Riwayat Permintaan</a></li>
                         <li><a href="riwayatBarangMasuk.php">Riwayat Barang Masuk</a></li>
-
+                        <li><a href="riwayatDataPembelianBarang.php">Riwayat Permintaan Pembelian</a></li>
                     </ul>
                 </li>
             <?php } ?>
