@@ -9,14 +9,11 @@
 #dibagian manager tambah barant, awal sama keluar di hilangkan
 
 
+#tambahan
+1. menu remove saata ajukan semua barang
 
 
-TPS          :
-NIK           : 3201142102030005
-Nama       : Rahman Fedriana
-Alamat     : Kp. Mekarsari, Rt03/Rw07, Kel/Desa Leuwimekar, Kecamatan Leuwiliang
-No hp.      : 082258527102
-No rek.     : 
+
 
 
 

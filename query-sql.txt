@@ -1,0 +1,82 @@
+#user
+CREATE TABLE user (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    photo VARCHAR(255),
+    nama VARCHAR(255),
+    email VARCHAR(255) UNIQUE,
+    no_telpon VARCHAR(15),
+    username VARCHAR(255),
+    password VARCHAR(255),
+    alamat TEXT,
+    role INT(11),
+    isActive BOOLEAN,
+    tanda_tangan VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL
+);
+#role 
+CREATE TABLE role (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nama_role VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL
+);
+#rak_barang 
+CREATE TABLE rak_barang (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nama_rak VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL
+);
+#tb_permintaan
+CREATE TABLE tb_permintaan (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nama_barang VARCHAR(255),
+    id_user int(11),
+    nama_teknisi varchar(255),
+    jumlah_barang int(11),
+    surat_request varchar(255),
+    status varchar(10),
+    pesan_gagal text,
+    accepter int(11),
+    operator int(11),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL
+);
+#tb_barang
+CREATE TABLE tb_barang (
+    kode_barang varchar(255),
+    photo VARCHAR(255),
+    nama_barang VARCHAR(255),
+    merk varchar(255),
+    rak int(11),
+    satuan VARCHAR(255),
+    jumlah_awal int(11),
+    jumlah_masuk int(11),
+    jumlah_keluar int(11),
+    jumlah_total int(11),
+    jumlah_akhir int(11),
+    stock varchar(255),
+    status_pembelian varchar(11),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL
+);
+#riwayat_barang_masuk
+CREATE TABLE riwayat_barang_masuk (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    kd_barang VARCHAR(255),
+    jumlah_masuk int(11),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL
+);
+#pembelian_barang 
+CREATE TABLE pembelian_barang (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    kode_barang VARCHAR(255),
+    nama_barang VARCHAR(255),
+    requester int(11),
+    status varchar(5),
+    accepter int(11),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL
+);

@@ -1,34 +1,32 @@
 <?php
 include '../conn.php';
 session_start();
-if (isset($_POST['requestPembelianAll'])) {
 
-    $getDataBarangYangMenipis = mysqli_query($conn, "SELECT * FROM tb_barang WHERE jumlah_masuk < 20 AND status_pembelian = 'N'");
-    
-    $kodeBarang = "";
-    $namaBarang = "";
-    $requester = $_SESSION['id_user'];
-    $status = 'P';
-    
-    while ($data = mysqli_fetch_array($getDataBarangYangMenipis)) {
-        $kodeBarang = $data['kode_barang'];
-        $namaBarang = $data['nama_barang'];
-        
-        $simpanData = mysqli_query($conn, "INSERT INTO `pembelian_barang`(`id`, `kode_barang`, `nama_barang`, `requester`, `status`) VALUES ('','$kodeBarang','$namaBarang','$requester','$status')");
+if (isset($_POST['requestPembelianAll'])) {
+    // Mendapatkan data barang yang ingin diajukan dari JavaScript
+    $barangYangInginDiajukan = json_decode($_POST['barangYangInginDiajukan'], true);
+
+    foreach ($barangYangInginDiajukan as $barang) {
+        $kodeBarang = $barang['kode_barang'];
+        $namaBarang = $barang['nama_barang'];
+        $requester = $_SESSION['id_user'];
+        $status = 'P'; // Misalkan status pembelian adalah "P" (Pending)
+
+        // Simpan data pembelian barang ke database
+        $simpanData = mysqli_query($conn, "INSERT INTO `pembelian_barang`(`kode_barang`, `nama_barang`, `requester`, `status`) VALUES ('$kodeBarang','$namaBarang','$requester','$status')");
 
         if ($simpanData) {
-            $ubahStatusPembelianBarang = mysqli_query($conn, "UPDATE tb_barang SET status_pembelian = 'P' WHERE jumlah_masuk < 20 AND status_pembelian = 'N'");
+            // Update status pembelian barang di tabel tb_barang
+            $ubahStatusPembelianBarang = mysqli_query($conn, "UPDATE tb_barang SET status_pembelian = 'P' WHERE kode_barang = '$kodeBarang'");
+
             if ($ubahStatusPembelianBarang) {
                 echo "Permintaan Pembelian Barang Berhasil";
-            }else{
-                echo "Gagal !";
+            } else {
+                echo "Gagal mengubah status pembelian barang!";
             }
-            
         } else {
-            echo "Error Bos!";
+            echo "Gagal menyimpan data pembelian barang!";
         }
-        
     }
-    
 }
 ?>

@@ -1,0 +1,16 @@
+1. kunjungi provider web hosting free . disini penulis menggunakan infinitefree
+2. registrasi akun seperti yang ditunjukan gambar 2
+3. log in
+4. setelah berhasil login di arahkan ke dashboard infinitefree
+5. membuat domain disni penulis membuat domain dengan nama .... seperti pada gambar
+6. credetial information untuk di cpanel
+7. membuat database
+8. php myadmin database piilih import lalu choose file dan go
+9 . halaman cpanel , lalu klik file manager
+10 . tampilan file managaer
+11 . extract file projek yang ingin di hosting
+12 . proses extract
+13 upload file di file manager
+14. proses upload
+18. jika berhasil mengupload maka akan seperti gambar 18
+17. buka nama web seperti gambar 17

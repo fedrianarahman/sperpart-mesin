@@ -107,7 +107,8 @@ include './controller/conn.php';
                         <div class="card">
                             <div class="card-header">
                                 <h4 class="card-title">Data Barang</h4>
-                                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#basicModal">+ Ajukan Semua</button>
+                                <button type="button" class="btn btn-sm btn-primary" id="ajukanPembelianMasal">+ Ajukan Semua</button>
+                                <!-- <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#basicModal">+ Ajukan Semua</button> -->
                                 <!-- Modal -->
                                 <div class="modal fade" id="basicModal">
                                     <div class="modal-dialog" role="document">
@@ -125,25 +126,17 @@ include './controller/conn.php';
                                                             <th>Kode Barang</th>
                                                             <th>Nama Barang</th>
                                                             <th>Stock</th>
+                                                            <th>Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <?php
-                                                        $query1 = mysqli_query($conn, "SELECT * FROM tb_barang WHERE jumlah_masuk < 20 AND status_pembelian = 'N'");
-                                                        $no = 1;
-                                                        while ($data1 = mysqli_fetch_array($query1)) { ?>
-                                                            <tr>
-                                                                <td><?php echo $no++; ?></td>
-                                                                <td><?php echo $data1['kode_barang']; ?></td>
-                                                                <td><?php echo $data1['nama_barang']; ?></td>
-                                                                <td><?php echo $data1['jumlah_masuk']; ?></td>
-                                                            </tr>
-                                                        <?php } ?>
+
                                                     </tbody>
                                                 </table>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                                                <button class="btn btn-sm btn-warning text-white">Reset</button>
                                                 <button type="button" class="btn btn-sm btn-primary" id="ajukanPembelian">Ajukan</button>
                                             </div>
                                         </div>
@@ -233,18 +226,145 @@ include './controller/conn.php';
     <!-- Required vendors -->
     <!-- Required vendors -->
     <script src="vendor/global/global.min.js"></script>
-    <script src="vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <!-- <script src="vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script> -->
     <script src="js/custom.min.js"></script>
     <script src="js/dlabnav-init.js"></script>
 
     <!-- Datatable -->
     <script src="vendor/datatables/js/jquery.dataTables.min.js"></script>
     <script src="js/plugins-init/datatables.init.js"></script>
-    <script src="./js/jquery-3.5.1.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
+            let barangYangInginDiajukan = []; // Variabel untuk melacak barang yang ingin diajukan
 
+            // ajukan semua pembelian
+            $(document).on('click', '#ajukanPembelianMasal', function() {
+                Swal.fire({
+                    title: 'Ajukan Semua Pembelian Barang ?',
+                    icon: 'info',
+                    showCancelButton: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "POST",
+                            url: "./controller/barang/getStockBarang.php",
+                            data: {
+                                getStockBarang: true
+                            },
+                            dataType: "json",
+                            success: function(response) {
+                                // Kosongkan tabel terlebih dahulu
+                                $('#basicModal').find('tbody').empty();
+
+                                // Set variabel barangYangInginDiajukan dengan data yang diterima
+                                barangYangInginDiajukan = response;
+
+                                // Iterasi melalui data dan tambahkan baris-baris ke tabel
+                                $.each(response, function(index, data) {
+                                    var newRow = '<tr>' +
+                                        '<td>' + (index + 1) + '</td>' +
+                                        '<td>' + data.kode_barang + '</td>' +
+                                        '<td>' + data.nama_barang + '</td>' +
+                                        '<td>' + data.jumlah_masuk + '</td>' +
+                                        '<td><button type="button" class="btn btn-sm btn-danger remove-item" data-kode="' + data.kode_barang + '">X</button></td>' +
+                                        '</tr>';
+                                    $('#basicModal').find('tbody').append(newRow);
+                                });
+
+                                // Tampilkan modal setelah menambahkan data ke tabel
+                                $('#basicModal').modal('show');
+                                console.log("line 282", barangYangInginDiajukan);
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Menangani klik pada tombol "X"
+            $(document).on('click', '.remove-item', function() {
+                // Hapus baris tabel saat tombol "X" di klik
+                $(this).closest('tr').remove();
+                var kodeBarang = $(this).data('kode');
+                console.log('Kode Barang:', kodeBarang, 'Dibatalkan');
+
+                // Hapus barang dari variabel barangYangInginDiajukan
+                barangYangInginDiajukan = barangYangInginDiajukan.filter(function(item) {
+                    return item.kode_barang !== kodeBarang;
+                });
+                console.log("Variabel barang YangInginDiajukan setelah dihapus:", barangYangInginDiajukan);
+            });
+
+
+
+            // Menangani klik pada tombol "Reset"
+            $(document).on('click', '.btn-warning', function() {
+                // Kembalikan data tabel ke kondisi awal
+                $.ajax({
+                    type: "POST",
+                    url: "./controller/barang/getStockBarang.php",
+                    data: {
+                        getStockBarang: true
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        $('#basicModal').find('tbody').empty();
+                        barangYangInginDiajukan = response;
+                        $.each(response, function(index, data) {
+                            var newRow = '<tr>' +
+                                '<td>' + (index + 1) + '</td>' +
+                                '<td>' + data.kode_barang + '</td>' +
+                                '<td>' + data.nama_barang + '</td>' +
+                                '<td>' + data.jumlah_masuk + '</td>' +
+                                '<td><button type="button" class="btn btn-sm btn-danger remove-item" data-kode="' + data.kode_barang + '">X</button></td>' +
+                                '</tr>';
+                            $('#basicModal').find('tbody').append(newRow);
+                        });
+                        console.log("line 328", barangYangInginDiajukan);
+                    }
+                });
+            });
+
+            // ajukan pembelian barang berdasarkan data yang terpilih
+            $(document).on('click', '#ajukanPembelian', function() {
+                $('#basicModal .close').click();
+
+                // Kirim data barang yang ingin diajukan
+                $.ajax({
+                    type: "POST",
+                    url: "./controller/barang/requestPembelianBarangAll.php",
+                    data: {
+                        requestPembelianAll: true,
+                        barangYangInginDiajukan: JSON.stringify(barangYangInginDiajukan) // Kirim data sebagai JSON string
+                    },
+                    success: function(response) {
+                        console.log("Data yang akan disimpan:", response);
+
+                        // Lanjutkan ke AJAX kedua di sini
+                        Swal.fire({
+                            text: 'Permintaan Pembelian Barang Berhasil !',
+                            icon: 'success'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        });
+                    },
+                    error: function(response) {
+                        Swal.fire({
+                            text: response,
+                            icon: 'danger'
+                        });
+                    }
+                });
+            });
+
+            // request pembelian 1 barang
             $(document).on('click', '#requestPembelian', function() {
                 let kodeBarang = $(this).val();
                 Swal.fire({
@@ -280,37 +400,6 @@ include './controller/conn.php';
                         });
                     }
                 })
-            });
-
-            $(document).on('click', '#ajukanPembelian', function() {
-                $('#basicModal .close').click();
-                $.ajax({
-                    type: "POST",
-                    url: "./controller/barang/requestPembelianBarangAll.php",
-                    data: {
-                        requestPembelianAll: true
-                    },
-                    // dataType: 'json'
-                    success: function(response) {
-                        console.log("Data yang akan disimpan:", response);
-
-                        // Lanjutkan ke AJAX kedua di sini
-                        Swal.fire({
-                            text: 'Permintaan Pembelian Barang Berhasil !',
-                            icon: 'success'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                location.reload();
-                            }
-                        });
-                    },
-                    error: function(response) {
-                        Swal.fire({
-                            text: response,
-                            icon: 'danger'
-                        });
-                    }
-                });
             });
         });
     </script>
