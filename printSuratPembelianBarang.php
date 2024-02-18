@@ -43,6 +43,7 @@ $dataKodeBarang1 = $data['kode_barang'];
 $dataStatus1 = "";
 $ttdStaff = $data['photo_staff'];
 $ttdManager = $data['photo_manager'];
+
 if ($data['status']=='P') {
     $dataStatus1 = 'Menunggu Persetujuan';
 } else {
@@ -84,9 +85,10 @@ $pdf->setPageMark();
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
 // content
-$judul = <<<EOD
-<h1 style="font-size:20px; ">Surat Permintaan Pembelian Barang</h1>
-EOD;
+// $judul = <<<EOD
+// <h1 style="font-size:20px; ">Surat Permintaan Pembelian Barang </h1>
+// EOD;
+$judul = $ttdManager;
 $ptSanbe = <<<EOD
 <h2 style="font-size:15px;">PT Sanbe Farma</h2>
 EOD;
@@ -244,8 +246,8 @@ $pdf->writeHTMLCell(0, 0, 150, 225,  $jabatanPenyetuju, 0, 1, 0, true, '', true)
 
 
 // image
-$pdf->Image('images/ttd/' . $ttdStaff, 20, 200, 20, 20, 'PNG', 'http://www.tcpdf.org', '', false, 150, '', false, false, 1, false, false, false);
-$pdf->Image('images/ttd/' .$ttdManager, 150, 200, 20, 20, 'PNG', 'http://www.tcpdf.org', '', false, 150, '', false, false, 1, false, false, false);
+ $pdf->Image( './images/ttd/1702019452_ttd1.png', 20, 200, 20, 20, 'PNG', 'http://www.tcpdf.org', '', false, 150, '', false, false, 1, false, false, false);
+// $pdf->Image('./images/ttd/' .$ttdManager, 150, 200, 20, 20, 'PNG', 'http://www.tcpdf.org', '', false, 150, '', false, false, 1, false, false, false);
 $pdf->SetLineStyle(array('width' => 0.2, 'color' => array(0, 0, 0))); // Mengatur lebar garis menjadi 0.2mm (sekitar 1 piksel)
 $pdf->Line(15, 30, 200, 30); // Menggambar garis dengan koordinat x1=15, y1=55, x2=200, y2=55
 $pdf->Output('surat-permintaan-pembelian-barang.pdf', 'I');
