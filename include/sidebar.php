@@ -7,6 +7,9 @@
                     <span class="nav-text">Dashboard</span>
                 </a>
             </li>
+
+            <?php if ($_SESSION['role'] == 'supervisor') {?>
+            <?php }?>
             <?php
             if ($_SESSION['role'] == 'manager') { ?>
                 <li class=""><a class="ai-icon" href="dataUser.php" aria-expanded="false">
@@ -28,21 +31,37 @@
                     </ul>
                 </li>
             <?php } ?>
-            <li class=""><a class="ai-icon" href="dataBarang.php" aria-expanded="false">
+            
+            <?php if ($_SESSION['role'] === 'teknisi') {?>
+                <li class=""><a class="ai-icon" href="dataBarang.php" aria-expanded="false">
                     <i class="fa fa-bookmark"></i>
                     <span class="nav-text">Data Barang</span>
                 </a>
             </li>
-            <?php if ($_SESSION['role'] != 'teknisi') {
-                # code...
-            } ?>
-            <li class=""><a class="ai-icon" href="dataPermintaan.php" aria-expanded="false">
+                <li class=""><a class="ai-icon" href="dataPermintaan.php" aria-expanded="false">
                     <i class="fa fa-pencil-square-o"></i>
                     <span class="nav-text">Permintaan</span>
                 </a>
+            </li>    
+            <?php }?>
+            <?php if ($_SESSION['role'] === 'operator gudang') {?>
+                <li class=""><a class="ai-icon" href="dataBarang.php" aria-expanded="false">
+                    <i class="fa fa-bookmark"></i>
+                    <span class="nav-text">Data Barang</span>
+                </a>
             </li>
+                <li class=""><a class="ai-icon" href="dataPermintaan.php" aria-expanded="false">
+                    <i class="fa fa-pencil-square-o"></i>
+                    <span class="nav-text">Permintaan</span>
+                </a>
+            </li>    
+            <?php }?>
             <?php
             if ($_SESSION['role']=='staff gudang' || $_SESSION['role'] == 'manager') {?>
+            <li class=""><a class="ai-icon" href="dataBarang.php" aria-expanded="false">
+                <i class="fa fa-bookmark"></i>
+                <span class="nav-text">Data Barang</span>
+            </a>
             <li class=""><a class="ai-icon" href="dataPembelianBarang.php" aria-expanded="false">
             <i class="fa fa-cart-plus" aria-hidden="true"></i>
                     <span class="nav-text">Pembelian Barang</span>

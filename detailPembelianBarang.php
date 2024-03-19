@@ -319,7 +319,7 @@ $id = $_GET['id'];
                             <a href="./dataPembelianBarang.php" class="btn btn-sm btn-warning text-white">Kembali</a>
                                 <?php
                                 if($_SESSION['role']=='manager'){?>
-                                    <a href="./controller/barang/konfirmasiPembelianBarang.php?id_pembelian=<?php echo $id ?>" class="btn float-right btn-success text-white">Konfirmasi</a>
+                                    <a href="./controller/barang/konfirmasiPembelianBarang.php?id_pembelian=<?php echo $id ?>" class="btn float-right btn-success text-white" >Konfirmasi</a>
                                 <?php }?>
                                 <a href="./printSuratPembelianBarang.php?idPembelian=<?php echo $id?>" target="_blank" class="btn btn-primary float-right text-white mr-2"><i class="fa fa-print" ></i> Cetak</a>
                             </div>

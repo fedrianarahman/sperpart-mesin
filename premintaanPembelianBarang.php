@@ -225,19 +225,18 @@ include './controller/conn.php';
     ***********************************-->
     <!-- Required vendors -->
     <!-- Required vendors -->
-    <script src="vendor/global/global.min.js"></script>
-    <!-- <script src="vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script> -->
+    <!-- Required vendors -->
+    <script src="./js/jquery-3.5.1.min.js"></script>
+     <script src="vendor/global/global.min.js"></script>
+    <script src="vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
     <script src="js/custom.min.js"></script>
     <script src="js/dlabnav-init.js"></script>
-
+    <script src="vendor/svganimation/vivus.min.js"></script>
+    <script src="vendor/svganimation/svg.animation.js"></script>
+    <script src="js/styleSwitcher.js"></script>
     <!-- Datatable -->
     <script src="vendor/datatables/js/jquery.dataTables.min.js"></script>
     <script src="js/plugins-init/datatables.init.js"></script>
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- Bootstrap JavaScript -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
@@ -261,7 +260,7 @@ include './controller/conn.php';
                             success: function(response) {
                                 // Kosongkan tabel terlebih dahulu
                                 $('#basicModal').find('tbody').empty();
-
+                                console.log("line 263", response);
                                 // Set variabel barangYangInginDiajukan dengan data yang diterima
                                 barangYangInginDiajukan = response;
 

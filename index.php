@@ -95,6 +95,7 @@ if (!isset($_SESSION['nama'])) {
                       </a>
                   </div>
                     <?php }?>
+                    <?php if ($_SESSION['role']!='supervisor') {?>
                     <div class="col-md-4">
                         <a href="./dataBarang.php">
                             <div class="widget-stat card shadow-sm">
@@ -137,6 +138,30 @@ if (!isset($_SESSION['nama'])) {
                             </div>
                         </a>
                     </div>
+                    <?php }?>
+                    <?php if($_SESSION['role']=='supervisor'){?>
+                        <!-- <div class="col-md-4">
+                            <a href="./dataBarang.php">
+                                <div class="widget-stat card shadow-sm">
+                                    <div class="card-body">
+                                        <div class="media">
+                                            <span class="mr-3">
+                                                <i class="fa fa-users" style=""></i>
+                                            </span>
+                                            <div class="media-body ">
+                                                <p class="mb-1">Pembelian Barang</p>
+                                                <?php
+                                                $getDataBarang = mysqli_query($conn, "SELECT * FROM tb_barang");
+                                                $dataBarang = mysqli_num_rows($getDataBarang);
+                                                ?>
+                                                <h3 class=""><?= $dataBarang; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div> -->
+                    <?php }?>
                 </div>
                 <?php if ($_SESSION['role']=='manager' || $_SESSION['role']== 'staff gudang' || $_SESSION['role']=='admin') {?>
                     <div class="row">

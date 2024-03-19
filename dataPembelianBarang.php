@@ -144,24 +144,29 @@ function formatTanggal($param)
                                         ORDER BY pembelian_barang.created_at ASC");
                                             $no = 1;
                                             $total = mysqli_num_rows($query);
-                                            while ($data = mysqli_fetch_array($query)) {?>
-                                            <tr>
-                                                <td><?php echo $no++; ?></td>
-                                                <td><?php echo $data['kode_barang'] ?></td>
-                                                <td><?php echo $data['nama_barang'] ?></td>
-                                                <td><?php echo $data['nama'] ?></td>
-                                                <td><?php if ($data['status']=='P') {
-                                                    echo '<span class="badge badge-warning light">Prosess</span>';
-                                                }elseif($data['status']=='A'){
-                                                    echo '<span class="badge badge-success light">Disetujui</span>';
-                                                }  ?></td>
-                                                <td><?php echo $data['total_data'] ?></td>
-                                                <td><?php echo formatTanggal($data['tanggal_permintaan']) ?></td>
-                                                <td>
-                                                    <a href="./detailPembelianBarang.php?id=<?php echo $data['tanggal_permintaan']?>" class="btn btn-sm btn-warning"><i class="la la-eye text-white"></i></a>
-                                                </td>
-                                            </tr>
-                                            <?php }?>
+                                            while ($data = mysqli_fetch_array($query)) { ?>
+                                                <tr>
+                                                    <td><?php echo $no++; ?></td>
+                                                    <td><?php echo $data['kode_barang'] ?></td>
+                                                    <td><?php echo $data['nama_barang'] ?></td>
+                                                    <td><?php echo $data['nama'] ?></td>
+                                                    <td><?php if ($data['status'] == 'P') {
+                                                            echo '<span class="badge badge-warning light">Prosess</span>';
+                                                        } elseif ($data['status'] == 'A') {
+                                                            echo '<span class="badge badge-success light">Disetujui</span>';
+                                                        }elseif ($data['status'] == 'A-') {
+                                                            echo '<span class="badge badge-success light">Dalam Pembelian Supervisor</span>';
+                                                        }  ?></td>
+                                                    <td><?php echo $data['total_data'] ?></td>
+                                                    <td><?php echo formatTanggal($data['tanggal_permintaan']) ?></td>
+                                                    <td>
+                                                        <a href="./detailPembelianBarang.php?id=<?php echo $data['tanggal_permintaan'] ?>" class="btn btn-sm btn-warning"><i class="la la-eye text-white"></i></a>
+                                                        <?php if ($data['status'] == 'A') { ?>
+                                                            <button id="kirimSupervisor" value="<?php echo $data['tanggal_permintaan'] ?>" class="btn btn-primary text-white btn-sm"><i class="fa fa-id-card-o" aria-hidden="true" data-toggle="modal" data-target="#basicModal"></i></button>
+                                                        <?php } ?>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -174,6 +179,36 @@ function formatTanggal($param)
         <!--**********************************
             Content body end
         ***********************************-->
+        <div class="modal fade" id="basicModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Kirim Ke Supervisor</h5>
+                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="">
+                            <div class="form-group">
+                                <label for="">Pilih SuperVisor</label>
+                                <select name="" class="form-control" id="idSuperVisor">
+                                    <option value="">Pilih</option>
+                                    <?php
+                                    $query = mysqli_query($conn, "SELECT * FROM user WHERE role='27'");
+                                    while ($data = mysqli_fetch_array($query)) { ?>
+                                        <option value="<?php echo $data['id'] ?>"><?php echo $data['nama'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-sm btn-primary" id="kirimKeSuperVisor">Konfirmasi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
         <!--**********************************
@@ -210,7 +245,48 @@ function formatTanggal($param)
     <script src="js/plugins-init/datatables.init.js"></script>
     <script src="./js/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+    <script>
+        $(document).ready(function() {
+            let dataIdSuperVisor = '';
+            let dataIdPembelianBarang = '';
+
+            $(document).on('click', '#kirimSupervisor', function() {
+                const value = $(this).val();
+                dataIdPembelianBarang = value;
+            });
+
+            $(document).on('change', '#idSuperVisor', function() {
+                const idSuperVisor = $(this).val();
+                dataIdSuperVisor = idSuperVisor;
+            });
+
+            $(document).on('click', '#kirimKeSuperVisor', function() {
+                $.ajax({
+                    type: "POST",
+                    url: "./controller/supervisor/kirimSuperVisor.php",
+                    data: {
+                        kirimKeSuperVisor: true,
+                        idPembelianBarang: dataIdPembelianBarang,
+                        idSuperVisor: dataIdSuperVisor
+                    },
+                    // dataType: "json",
+                    success: function(response) {
+                        $('.modal').find('.close').click();
+                        Swal.fire({
+                            title: '',
+                            text: response,
+                            icon: 'success'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        })
+                        // console.log("line 282", response);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

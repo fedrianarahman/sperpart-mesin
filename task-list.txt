@@ -1,0 +1,12 @@
+
+
+#Activity Diagram 
+1. Activity Diagram Permintaan Pembelian Barang
+2. Activity Diagram Permintaan barang
+3. Activity Pengolahan data barang Barang
+4. 
+
+#sequence diagram 
+
+
+#judul : Pengaruh tingkat inflasi terhadap pertumbuhan ekonomi suatu negara 
